@@ -4,15 +4,9 @@
 #include "ofxMidi.h"
 #include "ofxPDSP.h"
 #include "ofxGui.h"
-
-#include "ofxLaunchControllers.h"
-
-#include "effect/BasiVerb.h"
-#include "effect/Chorus.h"
-#include "effect/StereoDelay.h"
-
 #include "FMMono.h"
 #include "ModalTable.h"
+#include "StereoDelay.h"
 
 class ofApp : public ofBaseApp{
 
@@ -37,25 +31,16 @@ class ofApp : public ofBaseApp{
         
         void oscMapping( std::string address, int index );
         
-        void mapControls();
-        
         pdsp::Engine        engine;   
         pdsp::osc::Input    osc;
-    
-        ofxLaunchControl lc;
           
         pdsp::ParameterGain fader;
-        
-        ofParameter<int> timeSelect;
-            void onTime( int & value );
 
         std::vector<np::synth::FMMono>  synths;
         
-        np::effect::BasiVerb    reverb;
+        pdsp::ParameterGain reverbGain;
+        pdsp::BasiVerb    reverb;
         np::effect::StereoDelay delays;
-        
-        std::vector<pdsp::ParameterAmp> enableSynth;
-        pdsp::ParameterAmp sendSwitch;
 
         np::tuning::ModalTable table;
         

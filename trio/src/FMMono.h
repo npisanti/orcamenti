@@ -19,7 +19,18 @@ public:
     float meter_mod_env() const;
     float meter_pitch() const;
 
-    ofParameter<float> slew;
+    void preset( int index );
+    void slew( float value ); 
+    
+    ofParameterGroup    parameters;
+        pdsp::ParameterGain gain;
+        ofParameter<float>  attack;
+        pdsp::Parameter     drift;
+    
+    ofParameterGroup & label (std::string name );
+    
+    float lastTrigger;
+    float lastOtherTrigger;
     
 private:
     pdsp::PatchNode     voiceTrigger;
@@ -50,35 +61,14 @@ private:
     pdsp::OnePole pitchSlew;
     pdsp::ValueControl ratioControl;
     
-    void preset( int index );
-
     pdsp::ValueControl slew_ctrl;
-    void onSlew( float & value );
-    
-public:
-    ofParameterGroup    parameters;
-
-    ofParameterGroup & label (std::string name );
-
-    // ------- parameters ------------------------------------
-    pdsp::ParameterGain gain;
-
     pdsp::Amp  otherControl;
 
-    ofParameter<float>  attack;
-    pdsp::ValueControl     env_attack_ctrl;
-
+    pdsp::ValueControl  env_attack_ctrl;
     pdsp::PatchNode     decayControl;
-    
     pdsp::Parameter     env_release_ctrl;
-
-    pdsp::Parameter     drift;
     
     void onAttack( float & value );
-    
-    float lastTrigger;
-    float lastOtherTrigger;
-    
 };
 
 }} // end namspaces 

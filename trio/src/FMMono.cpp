@@ -14,8 +14,6 @@ void np::synth::FMMono::patch(){
 
     parameters.add( attack.set( "attack", 0.0f, 0.0f, 200.0f ) );
     parameters.add( env_release_ctrl.set("env release", 200, 5, 2000));   
-    slew.addListener( this, &np::synth::FMMono::onSlew );
-    parameters.add( slew.set("pitch slew", 0.0f, 0.0f, 1.0f) ); 
     parameters.add( drift.set("pitch drift", 0.0f, 0.0f, 1.0f) );    
 
     // ---------------- PATCHING ------------------------
@@ -154,8 +152,8 @@ void np::synth::FMMono::preset( int index ){
     }
 }
 
-void np::synth::FMMono::onSlew( float & value ){
-    if( slew> 0.0f){
+void np::synth::FMMono::slew( float value ){
+    if( value> 0.0f){
         float control =  (1.0f-value);
         control *= control;
         control = control * 14.0f  + 1.0f;

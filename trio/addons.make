@@ -4,6 +4,4 @@ ofxPDSP
 ofxGui
 ofxOsc
 ofxAudioFile
-ofxWatchFile
-np-patches
-ofxLaunchControllers
+
