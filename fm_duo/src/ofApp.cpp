@@ -17,7 +17,7 @@ void ofApp::setup(){
     
     for( size_t i=0; i<synths.size(); ++i ){
         
-        synths[i].out_gain() >> enableSynth[i];
+        synths[i].out("gain") >> enableSynth[i];
 
         enableSynth[i] >> sendSwitch;        
         enableSynth[i] >> reverb;
@@ -29,8 +29,8 @@ void ofApp::setup(){
     }
     sendSwitch.enableSmoothing( 20.0f );   
 
-    synths[0] >> synths[1].in_other();
-    synths[1] >> synths[0].in_other();
+    synths[0].out("other") >> synths[1].in("other");
+    synths[1].out("other") >> synths[0].in("other");
     
     delays.ch(0) >> reverb;
     delays.ch(1) >> reverb;
@@ -43,36 +43,11 @@ void ofApp::setup(){
     delays.ch(0) >> engine.audio_out(0);
     delays.ch(1) >> engine.audio_out(1);
 
-    // ---------------- OSC CONTROL --------------------------------
+    // OSC mapping -----------------------------
     osc.linkTempo( "/orca/tempo" );
+    oscMapping( "/a", 0 );
+    oscMapping( "/b", 1 );
     
-    osc.out_value( "/a", 1 ) * 12.0f     >> synths[0].in("pitch");
-    osc.out_value( "/a", 2 ) >> synths[0].in("pitch");
-    osc.out_trig( "/a", 0 ) >> synths[0].in("trig");  
-    
-    osc.out_value( "/b", 1 ) * 12.0f     >> synths[1].in("pitch");
-    osc.out_value( "/b", 2 ) >> synths[1].in("pitch");
-    osc.out_trig( "/b", 0 ) >> synths[1].in("trig");  
-    
-    osc.parser( "/a", 2 ) = [&]( float value ) noexcept {
-        int i = value-1.0f;
-        float p = table.pitches[i%table.grades];
-        int o = i / table.grades;
-        p += o*12.0f;
-        return p;  
-    };
-    osc.parser( "/b", 2 ) = osc.parser( "/a", 2 );
-
-    lastTrigA = lastTrigB = 0.0f;
-    osc.parser( "/a", 0 ) = [&]( float value ) noexcept {
-        if(value==lastTrigA){ return pdsp::osc::Ignore;
-        }else{ lastTrigA = value; return value;  }
-    };
-    osc.parser( "/b", 0 ) = [&]( float value ) noexcept {
-        if(value==lastTrigB){ return pdsp::osc::Ignore;
-        }else{ lastTrigB = value; return value;  }
-    };
-
     // graphic setup---------------------------
     ofSetVerticalSync(true);
     ofDisableAntiAliasing();
@@ -91,21 +66,21 @@ void ofApp::setup(){
     
     timeSelect.addListener( this, &ofApp::onTime );
 
-    synthsGUI.setup("SYNTHS", "synths.xml", 240, 20);
+    synthsGUI.setup("SYNTHS", "synths.xml", 220, 10);
         synthsGUI.add( enableSynth[0].set("enable A", true) );
         synthsGUI.add( synths[0].label("fm synth A") );
         synthsGUI.add( enableSynth[1].set("enable B", true) );
         synthsGUI.add( synths[1].label("fm synth B") );
     synthsGUI.loadFromFile("synths.xml");
     
-    fxGUI.setup("FX", "fx.xml", 460, 20);
+    fxGUI.setup("FX", "fx.xml", 430, 10);
         fxGUI.add( timeSelect.set("time select", 0, 0, 9) );
         fxGUI.add( sendSwitch.set("send switch", false) );
         fxGUI.add( delays.parameters );
         fxGUI.add( reverb.parameters );
     fxGUI.loadFromFile( "fx.xml" );
     
-    tuningGUI.setup("TUNING", "tuning.xml", 20, 20 );
+    tuningGUI.setup("TUNING", "tuning.xml", 10, 10 );
     tuningGUI.add( table.parameters );
     tuningGUI.loadFromFile( "tuning.xml" );
     
@@ -121,17 +96,57 @@ void ofApp::setup(){
     engine.setup( 44100, 512, 3);     
 }
 
+        
+//--------------------------------------------------------------
+void ofApp::oscMapping( std::string address, int index ){
+
+    osc.out_trig( address, 0 ) >> synths[index].in("trig");  
+    osc.parser( address, 0 ) = [&, index]( float value ) noexcept {
+        if( value==synths[index].lastTrigger ){ return pdsp::osc::Ignore;
+        }else{ synths[index].lastTrigger = value; return value;  }
+    };
+    
+    osc.out_value( address, 1 ) * 12.0f     >> synths[index].in("pitch");
+    
+    osc.out_value( address, 2 ) >> synths[index].in("pitch");
+    osc.parser( address, 2 ) = [&]( float value ) noexcept {
+        int i = value-1.0f;
+        float p = table.pitches[i%table.grades];
+        int o = i / table.grades;
+        p += o*12.0f;
+        return p;  
+    };
+    
+    osc.out_value( address, 3 ) >> synths[index].in("decay");
+    osc.parser( address, 3 ) = [&]( float value ) noexcept {
+        value *= 0.112;
+        value = (value<1.0) ? value : 1.0;
+        value = value * value * 4000.0f;
+        return value;  
+    };
+        
+    osc.out_value( address, 4 ) >> synths[index].in("env_amount");
+
+    osc.out_value( address, 5 ) * 0.25f >> synths[index].in("other_amount");
+    
+    osc.out_trig( address, 6 ) >> synths[index].in("trig_other");  
+    osc.parser( address, 6 ) = [&, index]( float value ) noexcept {
+        if( value==synths[index].lastOtherTrigger ){ return pdsp::osc::Ignore;
+        }else{ synths[index].lastOtherTrigger = value; return value;  }
+    };
+}
+
 //--------------------------------------------------------------
 void ofApp::mapControls(){
     lc.setup();
-    
+    /*
     for( int i=0; i<2; ++i ){
         lc.knob( 0 + i*8, synths[i].fm_other.getOFParameterFloat());
-        lc.knob( 1 + i*8, synths[i].self_mod.getOFParameterFloat(), 0.0f, 0.3f );
-        lc.knob( 2 + i*8, synths[i].fm_mod.getOFParameterFloat());
-        lc.knob( 3 + i*8, synths[i].ratioSelect );
+        //lc.knob( 1 + i*8, synths[i].self_mod.getOFParameterFloat(), 0.0f, 0.3f );
+        //lc.knob( 2 + i*8, synths[i].fm_mod.getOFParameterFloat());
+        //lc.knob( 3 + i*8, synths[i].ratioSelect );
         lc.knob( 4 + i*8, synths[i].attack );
-        lc.knob( 5 + i*8, synths[i].decay );
+        //lc.knob( 5 + i*8, synths[i].decay );
         lc.knob( 6 + i*8, synths[i].slew );
     }
     
@@ -144,6 +159,7 @@ void ofApp::mapControls(){
     lc.radio( 2, 5, timeSelect, ofxLCLeds::Amber );
     lc.toggle( 6, delays.modAmt.getOFParameterFloat(), 0.0f, 3.5f );
     lc.toggle( 7, sendSwitch.getOFParameterBool() );
+    */
 }
 
 //--------------------------------------------------------------

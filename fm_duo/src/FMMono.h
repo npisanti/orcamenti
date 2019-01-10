@@ -16,17 +16,9 @@ public:
     
     void patch();
     
-    pdsp::Patchable& in_trig();
-    pdsp::Patchable& in_pitch();
-    pdsp::Patchable& in_fm();
-    pdsp::Patchable& in_self();
-    pdsp::Patchable& in_other();
-    pdsp::Patchable& out_gain();
-    
     float meter_mod_env() const;
     float meter_pitch() const;
 
-    ofParameter<int> ratioSelect;
     ofParameter<float> slew;
     
 private:
@@ -39,6 +31,9 @@ private:
     pdsp::Amp           fmAmp;
     pdsp::Amp           voiceAmp;
 
+    pdsp::ADSR          otherEnv;    
+    pdsp::Amp           otherAmp;
+
     pdsp::ADSR          ampEnv;    
     pdsp::ADSR          modEnv;    
             
@@ -46,10 +41,17 @@ private:
     pdsp::LFOPhazor         phazorFree;
     pdsp::TriggeredRandom   rnd;
     pdsp::OnePole           randomSlew;
-
-    void onRatio( int & value );
-
+    
+    pdsp::PatchNode envAmountControl;
+    pdsp::Amp fmModScale;
+    pdsp::Amp fmModAmount;
+    pdsp::Amp selfModScale;
+    pdsp::Amp selfModAmount;
     pdsp::OnePole pitchSlew;
+    pdsp::ValueControl ratioControl;
+    
+    void preset( int index );
+
     pdsp::ValueControl slew_ctrl;
     void onSlew( float & value );
     
@@ -61,27 +63,21 @@ public:
     // ------- parameters ------------------------------------
     pdsp::ParameterGain gain;
 
-    pdsp::ParameterAmp  fm_mod;
-    pdsp::ParameterAmp  self_mod;
-    pdsp::ParameterAmp  fm_other;
-    pdsp::Parameter     fm_ctrl;
-    pdsp::Parameter     self_ctrl;
-    //pdsp::Parameter     ratio_ctrl;
+    pdsp::Amp  otherControl;
 
     ofParameter<float>  attack;
     pdsp::ValueControl     env_attack_ctrl;
-    
-    ofParameter<float> decay;
-    pdsp::ValueControl     env_decay_ctrl;
+
+    pdsp::PatchNode     decayControl;
     
     pdsp::Parameter     env_release_ctrl;
 
     pdsp::Parameter     drift;
     
     void onAttack( float & value );
-    void onDecay( float & value );
     
-    pdsp::ValueControl ratio_ctrl;
+    float lastTrigger;
+    float lastOtherTrigger;
     
 };
 

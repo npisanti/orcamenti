@@ -35,13 +35,12 @@ class ofApp : public ofBaseApp{
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
         
+        void oscMapping( std::string address, int index );
+        
         void mapControls();
         
         pdsp::Engine        engine;   
         pdsp::osc::Input    osc;
-    
-        float lastTrigA;
-        float lastTrigB;
     
         ofxLaunchControl lc;
           
