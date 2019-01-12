@@ -18,13 +18,13 @@ ofParameterGroup & np::tuning::ModalTable::setup( int degrees, std::string name 
     for( RatioUI & r : ratios ){
         r.setBasePitch( masterPitchControl );  
         std::string label = "d";
-        label += ofToString(index+1);
+        label += ofToString(index);
         label += " numerator";
-        parameters.add( r.numerator.set( label, degrees + index, 1, 23 ) );
+        parameters.add( r.numerator.set( label, degrees + index, 1, 63 ) );
         label = "d";
-        label += ofToString(index+1);
+        label += ofToString(index);
         label += " denominator";
-        parameters.add( r.denominator.set( label, degrees, 1, 23 ) );
+        parameters.add( r.denominator.set( label, degrees, 1, 32 ) );
         
         r.numerator.addListener( this, &ModalTable::updateAll );
         r.denominator.addListener( this, &ModalTable::updateAll);

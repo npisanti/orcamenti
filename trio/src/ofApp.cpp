@@ -14,7 +14,7 @@ void ofApp::setup(){
 
     synths.resize( NUMSYNTHS );
 
-    table.setup( 8, "modal table" );
+    table.setup( 6, "modal table" );
     
     for( size_t i=0; i<synths.size(); ++i ){
         synths[i].out("gain") >> delays.ch(0);
@@ -114,7 +114,7 @@ void ofApp::oscMapping( std::string address, int index ){
     
     osc.out_value( address, 2 ) >> synths[index].in("pitch");
     osc.parser( address, 2 ) = [&]( float value ) noexcept {
-        int i = value-1.0f;
+        int i = value;
         float p = table.pitches[i%table.degrees];
         int o = i / table.degrees;
         p += o*12.0f;
