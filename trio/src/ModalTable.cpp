@@ -4,11 +4,11 @@
 
 #include "ModalTable.h"
 
-ofParameterGroup & np::tuning::ModalTable::setup( int grades, std::string name ) {
+ofParameterGroup & np::tuning::ModalTable::setup( int degrees, std::string name ) {
     
-    this->grades = grades;
-    ratios.resize( grades );
-    pitches.resize( grades );
+    this->degrees = degrees;
+    ratios.resize( degrees );
+    pitches.resize( degrees );
     
     parameters.setName( name );
     parameters.add( masterPitchControl.set( "master pitch",  36,   0,    60  ) );
@@ -20,11 +20,11 @@ ofParameterGroup & np::tuning::ModalTable::setup( int grades, std::string name )
         std::string label = "d";
         label += ofToString(index+1);
         label += " numerator";
-        parameters.add( r.numerator.set( label, grades + index, 1, 23 ) );
+        parameters.add( r.numerator.set( label, degrees + index, 1, 23 ) );
         label = "d";
         label += ofToString(index+1);
         label += " denominator";
-        parameters.add( r.denominator.set( label, grades, 1, 23 ) );
+        parameters.add( r.denominator.set( label, degrees, 1, 23 ) );
         
         r.numerator.addListener( this, &ModalTable::updateAll );
         r.denominator.addListener( this, &ModalTable::updateAll);

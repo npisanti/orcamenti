@@ -44,13 +44,13 @@ public: // ------------------- PUBLIC API --------------------------------------
     ModalTable(){}
     ModalTable( const ModalTable & other ) { }
     
-    ofParameterGroup & setup( int grades, std::string name="integer ratio mode" );
+    ofParameterGroup & setup( int degrees, std::string name="integer ratio mode" );
     ofParameterGroup & label( std::string name );  
     
     ofParameterGroup parameters;    
 
     std::vector<float> pitches;
-    int grades;
+    int degrees;
     
 private: // --------------------------------------------------------------------
 

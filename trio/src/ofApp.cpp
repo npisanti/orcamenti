@@ -115,8 +115,8 @@ void ofApp::oscMapping( std::string address, int index ){
     osc.out_value( address, 2 ) >> synths[index].in("pitch");
     osc.parser( address, 2 ) = [&]( float value ) noexcept {
         int i = value-1.0f;
-        float p = table.pitches[i%table.grades];
-        int o = i / table.grades;
+        float p = table.pitches[i%table.degrees];
+        int o = i / table.degrees;
         p += o*12.0f;
         return p;  
     };
