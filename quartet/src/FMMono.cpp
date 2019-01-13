@@ -19,13 +19,15 @@ void np::synth::FMMono::patch(){
     // ---------------- PATCHING ------------------------
     addModuleInput("trig", voiceTrigger);
     addModuleInput("trig_other", otherEnv.in_trig() );
-    addModuleInput("pitch", pitchSlew);
+    addModuleInput("pitch", pitchNode );
     addModuleInput("decay", decayControl );
-    addModuleInput("env_amount", envAmountControl );
+    addModuleInput("ratio", modulator.in_ratio() );
+    addModuleInput("fm_amount", fmModAmount.in_mod() );
+    addModuleInput("fb_amount", selfModAmount.in_mod() );
     addModuleInput("other", otherControl.in_signal() );
     addModuleInput("other_amount", otherControl.in_mod() );
     addModuleOutput( "gain", gain );
-    addModuleOutput( "other", otherAmp );
+    addModuleOutput( "other", otherAmp.out_signal() );
 
     // SIGNAL PATH -----------------------------
     modulator >> fmAmp >> carrier.in_fm() >> voiceAmp >> gain;
@@ -46,14 +48,6 @@ void np::synth::FMMono::patch(){
     voiceTrigger >> ampEnv >> voiceAmp.in_mod();
     voiceTrigger >> modEnv;
 
-    envAmountControl.enableBoundaries( 0.0f, 9.0f );
-    envAmountControl >> fmModScale >> fmModAmount.in_mod();
-    envAmountControl >> selfModScale >> selfModAmount.in_mod();
-    ratioControl >> modulator.in_ratio();
-    ratioControl.enableSmoothing( 100.0f );   
-    
-    preset( 0 );
-    
     modEnv >> fmModAmount   >> fmAmp.in_mod();
     modEnv >> selfModAmount >> carrier.in_fb();
 
@@ -73,95 +67,9 @@ void np::synth::FMMono::patch(){
     env_release_ctrl >> otherEnv.in_release();   
     otherEnv >> otherAmp.in_mod(); 
 
-    slew_ctrl.set(20000.0f);
-    slew_ctrl >> pitchSlew.in_freq();
-    pitchSlew >> pitchNode;
-    
     lastTrigger = 0.0f;    
     lastOtherTrigger = 0.0f;
 
-}
-
-void np::synth::FMMono::preset( int index ){
-    switch( index ){
-        case 0:
-            ratioControl.set( 1.0f ); 
-            selfModScale.set( 0.25f / 9.0f );
-            fmModScale.set( 0.0f );
-        break;
-        
-        case 1:
-            ratioControl.set( 0.25f ); 
-            selfModScale.set( 0.0f );
-            fmModScale.set( 3.0f / 9.0f );
-        break;
-        
-        case 2:
-            ratioControl.set( 0.5f ); 
-            selfModScale.set( 0.0f );
-            fmModScale.set( 3.0f / 9.0f );
-        break;
-
-        case 3:
-            ratioControl.set( 1.0f ); 
-            selfModScale.set( 0.0f );
-            fmModScale.set( 3.0f / 9.0f );
-        break;
-        
-        case 4:
-            ratioControl.set( 1.5f ); 
-            selfModScale.set( 0.0f );
-            fmModScale.set( 3.0f / 9.0f );
-        break;
-        
-        case 5:
-            ratioControl.set( 2.0f ); 
-            selfModScale.set( 0.0f );
-            fmModScale.set( 3.0f / 9.0f );
-        break;
-        
-        case 6:
-            ratioControl.set( 3.0f ); 
-            selfModScale.set( 0.0f );
-            fmModScale.set( 3.0f / 9.0f );
-        break;
-        
-        case 7:
-            ratioControl.set( 4.0f ); 
-            selfModScale.set( 0.0f );
-            fmModScale.set( 3.0f / 9.0f );
-        break;
-        
-        case 8:
-            ratioControl.set( 5.0f ); 
-            selfModScale.set( 0.0f );
-            fmModScale.set( 3.0f / 9.0f );
-        break;
-        
-        case 9:
-            ratioControl.set( 8.0f ); 
-            selfModScale.set( 0.0f );
-            fmModScale.set( 3.0f / 9.0f );
-        break;
-        
-        case 10:
-            ratioControl.set( 11.0f ); 
-            selfModScale.set( 0.0f );
-            fmModScale.set( 3.0f / 9.0f );
-        break;
-    }
-}
-
-void np::synth::FMMono::slew( float value ){
-    if( value> 0.0f){
-        float control =  (1.0f-value);
-        control *= control;
-        control = control * 14.0f  + 1.0f;
-        slew_ctrl.set( control );
-        //std::cout<<"slew is "<< control <<"hz\n";
-    }else{
-        slew_ctrl.set( 20000.0f );
-    }
 }
 
 void np::synth::FMMono::onAttack( float & value ){

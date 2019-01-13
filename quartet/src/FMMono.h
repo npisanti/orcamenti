@@ -18,9 +18,6 @@ public:
     
     float meter_mod_env() const;
     float meter_pitch() const;
-
-    void preset( int index );
-    void slew( float value ); 
     
     ofParameterGroup    parameters;
         pdsp::ParameterGain gain;
@@ -53,15 +50,9 @@ private:
     pdsp::TriggeredRandom   rnd;
     pdsp::OnePole           randomSlew;
     
-    pdsp::PatchNode envAmountControl;
-    pdsp::Amp fmModScale;
     pdsp::Amp fmModAmount;
-    pdsp::Amp selfModScale;
     pdsp::Amp selfModAmount;
-    pdsp::OnePole pitchSlew;
-    pdsp::ValueControl ratioControl;
     
-    pdsp::ValueControl slew_ctrl;
     pdsp::Amp  otherControl;
 
     pdsp::ValueControl  env_attack_ctrl;

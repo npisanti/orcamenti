@@ -47,18 +47,6 @@ void ofApp::setup(){
     oscMapping( "/c", 2 );
     oscMapping( "/d", 3 );
     
-    int i=0;
-    for( ; i<NUMSYNTHS; ++i ){
-        osc.parser("/s", i*2 ) = [&, i]( float value ) noexcept {
-            synths[i].preset( int(value) ); return pdsp::osc::Ignore;
-        };
-        osc.parser("/s", i*2 + 1 ) = [&, i]( float value ) noexcept {
-            value *= 0.112;
-            value = (value<1.0) ? value : 1.0;
-            synths[i].slew( value ); return pdsp::osc::Ignore;
-        };
-    }
-    
     // graphic setup---------------------------
     ofSetVerticalSync(true);
     ofDisableAntiAliasing();
@@ -111,31 +99,42 @@ void ofApp::oscMapping( std::string address, int index ){
         }else{ synths[index].lastTrigger = value; return value;  }
     };
     
-    osc.out_value( address, 1 ) * 12.0f     >> synths[index].in("pitch");
+    osc.out_value( address, 1 ) >> synths[index].in("ratio");
+    osc.parser( address, 1 ) = [&, index]( float value ) noexcept {
+        if( value==0.0f ){ 
+            return 0.5f;
+        }else if( value>=17.0f ){
+             return 17.0f;
+        }else{
+            return value;
+        }
+    };
     
-    osc.out_value( address, 2 ) >> synths[index].in("pitch");
-    osc.parser( address, 2 ) = [&]( float value ) noexcept {
+    osc.out_value( address, 2 ) * 12.0f     >> synths[index].in("pitch");
+    
+    osc.out_value( address, 3 ) >> synths[index].in("pitch");
+    osc.parser( address, 3 ) = [&]( float value ) noexcept {
         int i = value;
         float p = table.pitches[i%table.degrees];
         int o = i / table.degrees;
         p += o*12.0f;
         return p;  
     };
-    
-    osc.out_value( address, 3 ) >> synths[index].in("decay");
-    osc.parser( address, 3 ) = [&]( float value ) noexcept {
+
+    osc.out_value( address, 4 ) * 0.03f >> synths[index].in("fb_amount");
+    osc.out_value( address, 5 ) * 0.1f >> synths[index].in("fm_amount");
+    osc.out_value( address, 6 ) * 0.125f >> synths[index].in("other_amount");
+
+    osc.out_value( address, 7 ) >> synths[index].in("decay");
+    osc.parser( address, 7 ) = [&]( float value ) noexcept {
         value *= 0.112;
         value = (value<1.0) ? value : 1.0;
         value = value * value * 4000.0f;
         return value;  
-    };
-        
-    osc.out_value( address, 4 ) >> synths[index].in("env_amount");
-
-    osc.out_value( address, 5 ) * 0.125f >> synths[index].in("other_amount");
+    };        
     
-    osc.out_trig( address, 6 ) >> synths[index].in("trig_other");  
-    osc.parser( address, 6 ) = [&, index]( float value ) noexcept {
+    osc.out_trig( address, 8 ) >> synths[index].in("trig_other");  
+    osc.parser( address, 8 ) = [&, index]( float value ) noexcept {
         if( value==synths[index].lastOtherTrigger ){ return pdsp::osc::Ignore;
         }else{ synths[index].lastOtherTrigger = value; return value;  }
     };
