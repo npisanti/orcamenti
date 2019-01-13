@@ -1,12 +1,12 @@
 
 #include "ofApp.h"
 
-#define NUMSYNTHS 3
+#define NUMSYNTHS 4
 
 //--------------------------------------------------------------
 void ofApp::setup(){
     
-    ofSetWindowTitle("fm trio");
+    ofSetWindowTitle("fm quartet");
     engine.score.setTempo( 120.0f); // the delay times are clocked
 
     osc.setVerbose( true );
@@ -22,17 +22,15 @@ void ofApp::setup(){
         synths[i].out("gain") >> reverbGain >> reverb; 
     }
     
-    synths[0].out("gain") >> engine.audio_out(0);
-    synths[0].out("gain") >> engine.audio_out(1);    
-    synths[1].out("gain") * pdsp::panL( -0.3f ) >> engine.audio_out(0);
-    synths[1].out("gain") * pdsp::panR( -0.3f ) >> engine.audio_out(1);
-    synths[2].out("gain") * pdsp::panL( 0.3f ) >> engine.audio_out(0);
-    synths[2].out("gain") * pdsp::panR( 0.3f ) >> engine.audio_out(1);
+    for( int i=0; i<NUMSYNTHS; ++i ){
+        synths[i].out("gain") * pdsp::panL(pdsp::spread(i, NUMSYNTHS, 0.5f) ) >> engine.audio_out(0);
+        synths[i].out("gain") * pdsp::panR(pdsp::spread(i, NUMSYNTHS, 0.5f) ) >> engine.audio_out(1);  
+    }
+    for( int i=1; i<NUMSYNTHS; ++i){
+        synths[i-1].out("other") >> synths[i].in("other");
+    }
+    synths[NUMSYNTHS-1].out("other") >> synths[0].in("other");
 
-    synths[0].out("other") >> synths[1].in("other");
-    synths[1].out("other") >> synths[2].in("other");
-    synths[2].out("other") >> synths[0].in("other");
-    
     delays.ch(0) >> reverb;
     delays.ch(1) >> reverb;
     
@@ -50,10 +48,10 @@ void ofApp::setup(){
     
     int i=0;
     for( ; i<NUMSYNTHS; ++i ){
-        osc.parser("/s", i*NUMSYNTHS ) = [&, i]( float value ) noexcept {
+        osc.parser("/s", i*2 ) = [&, i]( float value ) noexcept {
             synths[i].preset( int(value) ); return pdsp::osc::Ignore;
         };
-        osc.parser("/s", i*NUMSYNTHS + 1 ) = [&, i]( float value ) noexcept {
+        osc.parser("/s", i*2 + 1 ) = [&, i]( float value ) noexcept {
             value *= 0.112;
             value = (value<1.0) ? value : 1.0;
             synths[i].slew( value ); return pdsp::osc::Ignore;
@@ -129,9 +127,9 @@ void ofApp::oscMapping( std::string address, int index ){
         return value;  
     };
         
-    osc.out_value( address, 4 ) >> synths[index].in("env_amount");
+    osc.out_value( address, 4 ) * 0.5f >> synths[index].in("env_amount");
 
-    osc.out_value( address, 5 ) * 0.25f >> synths[index].in("other_amount");
+    osc.out_value( address, 5 ) * 0.125f >> synths[index].in("other_amount");
     
     osc.out_trig( address, 6 ) >> synths[index].in("trig_other");  
     osc.parser( address, 6 ) = [&, index]( float value ) noexcept {
