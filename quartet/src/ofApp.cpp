@@ -45,6 +45,7 @@ void ofApp::setup(){
     oscMapping( "/a", 0 );
     oscMapping( "/b", 1 );
     oscMapping( "/c", 2 );
+    oscMapping( "/d", 3 );
     
     int i=0;
     for( ; i<NUMSYNTHS; ++i ){
@@ -77,6 +78,8 @@ void ofApp::setup(){
     synthsGUI.setup("SYNTHS", "synths.xml", 220, 10);
         synthsGUI.add( synths[0].label("fm synth A") );
         synthsGUI.add( synths[1].label("fm synth B") );
+        synthsGUI.add( synths[2].label("fm synth C") );
+        synthsGUI.add( synths[3].label("fm synth D") );
     synthsGUI.loadFromFile("synths.xml");
     
     fxGUI.setup("FX", "fx.xml", 430, 10);
