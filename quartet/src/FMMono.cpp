@@ -93,61 +93,61 @@ void np::synth::FMMono::preset( int index ){
         case 1:
             ratioControl.set( 0.25f ); 
             selfModScale.set( 0.0f );
-            fmModScale.set( 4.0f / 9.0f );
+            fmModScale.set( 3.0f / 9.0f );
         break;
         
         case 2:
             ratioControl.set( 0.5f ); 
             selfModScale.set( 0.0f );
-            fmModScale.set( 4.0f / 9.0f );
+            fmModScale.set( 3.0f / 9.0f );
         break;
 
         case 3:
             ratioControl.set( 1.0f ); 
             selfModScale.set( 0.0f );
-            fmModScale.set( 4.0f / 9.0f );
+            fmModScale.set( 3.0f / 9.0f );
         break;
         
         case 4:
             ratioControl.set( 1.5f ); 
             selfModScale.set( 0.0f );
-            fmModScale.set( 4.0f / 9.0f );
+            fmModScale.set( 3.0f / 9.0f );
         break;
         
         case 5:
             ratioControl.set( 2.0f ); 
             selfModScale.set( 0.0f );
-            fmModScale.set( 4.0f / 9.0f );
+            fmModScale.set( 3.0f / 9.0f );
         break;
         
         case 6:
             ratioControl.set( 3.0f ); 
             selfModScale.set( 0.0f );
-            fmModScale.set( 4.0f / 9.0f );
+            fmModScale.set( 3.0f / 9.0f );
         break;
         
         case 7:
             ratioControl.set( 4.0f ); 
             selfModScale.set( 0.0f );
-            fmModScale.set( 4.0f / 9.0f );
+            fmModScale.set( 3.0f / 9.0f );
         break;
         
         case 8:
             ratioControl.set( 5.0f ); 
             selfModScale.set( 0.0f );
-            fmModScale.set( 4.0f / 9.0f );
+            fmModScale.set( 3.0f / 9.0f );
         break;
         
         case 9:
             ratioControl.set( 8.0f ); 
             selfModScale.set( 0.0f );
-            fmModScale.set( 4.0f / 9.0f );
+            fmModScale.set( 3.0f / 9.0f );
         break;
         
         case 10:
             ratioControl.set( 11.0f ); 
             selfModScale.set( 0.0f );
-            fmModScale.set( 4.0f / 9.0f );
+            fmModScale.set( 3.0f / 9.0f );
         break;
     }
 }

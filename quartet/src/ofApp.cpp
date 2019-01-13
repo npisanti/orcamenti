@@ -127,7 +127,7 @@ void ofApp::oscMapping( std::string address, int index ){
         return value;  
     };
         
-    osc.out_value( address, 4 ) * 0.5f >> synths[index].in("env_amount");
+    osc.out_value( address, 4 ) >> synths[index].in("env_amount");
 
     osc.out_value( address, 5 ) * 0.125f >> synths[index].in("other_amount");
     
