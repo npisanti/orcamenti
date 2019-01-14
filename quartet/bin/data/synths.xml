@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<SYNTHS>
+	<fm_synth_A>
+		<gain>-12</gain>
+		<attack>5</attack>
+		<env_release>50</env_release>
+		<pitch_drift>0</pitch_drift>
+	</fm_synth_A>
+	<fm_synth_B>
+		<gain>-12</gain>
+		<attack>5</attack>
+		<env_release>50</env_release>
+		<pitch_drift>0</pitch_drift>
+	</fm_synth_B>
+	<fm_synth_C>
+		<gain>-12</gain>
+		<attack>5</attack>
+		<env_release>50</env_release>
+		<pitch_drift>0</pitch_drift>
+	</fm_synth_C>
+	<fm_synth_D>
+		<gain>-12</gain>
+		<attack>5</attack>
+		<env_release>50</env_release>
+		<pitch_drift>0</pitch_drift>
+	</fm_synth_D>
+</SYNTHS>
