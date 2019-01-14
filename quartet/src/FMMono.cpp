@@ -18,7 +18,6 @@ void np::synth::FMMono::patch(){
 
     // ---------------- PATCHING ------------------------
     addModuleInput("trig", voiceTrigger);
-    addModuleInput("trig_other", otherEnv.in_trig() );
     addModuleInput("pitch", pitchNode );
     addModuleInput("decay", decayControl );
     addModuleInput("ratio", modulator.in_ratio() );
@@ -27,13 +26,12 @@ void np::synth::FMMono::patch(){
     addModuleInput("other", otherControl.in_signal() );
     addModuleInput("other_amount", otherControl.in_mod() );
     addModuleOutput( "gain", gain );
-    addModuleOutput( "other", otherAmp.out_signal() );
+    addModuleOutput( "signal", voiceAmp );
 
     // SIGNAL PATH -----------------------------
     modulator >> fmAmp >> carrier.in_fm() >> voiceAmp >> gain;
           otherControl >> carrier.in_fm();
-                          carrier >> otherAmp;
-                          
+    
     0.2f    >> phazorFree;
     0.05f  >> randomSlew.in_freq();
                                          drift >> driftAmt.in_mod();        
@@ -60,12 +58,6 @@ void np::synth::FMMono::patch(){
     decayControl   >> modEnv.in_decay();
     0.0f >> modEnv.in_sustain();
     env_release_ctrl >> modEnv.in_release();
-    
-    env_attack_ctrl  >> otherEnv.in_attack();
-    decayControl   >> otherEnv.in_decay();
-    0.0f >> otherEnv.in_sustain();
-    env_release_ctrl >> otherEnv.in_release();   
-    otherEnv >> otherAmp.in_mod(); 
 
     lastTrigger = 0.0f;    
     lastOtherTrigger = 0.0f;

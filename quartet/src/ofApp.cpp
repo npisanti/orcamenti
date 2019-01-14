@@ -26,10 +26,11 @@ void ofApp::setup(){
         synths[i].out("gain") * pdsp::panL(pdsp::spread(i, NUMSYNTHS, 0.5f) ) >> engine.audio_out(0);
         synths[i].out("gain") * pdsp::panR(pdsp::spread(i, NUMSYNTHS, 0.5f) ) >> engine.audio_out(1);  
     }
-    for( int i=1; i<NUMSYNTHS; ++i){
-        synths[i-1].out("other") >> synths[i].in("other");
-    }
-    synths[NUMSYNTHS-1].out("other") >> synths[0].in("other");
+
+    synths[0].out("signal") >> synths[1].in("other");
+    synths[1].out("signal") >> synths[0].in("other");
+    synths[2].out("signal") >> synths[3].in("other");
+    synths[3].out("signal") >> synths[2].in("other");
 
     delays.ch(0) >> reverb;
     delays.ch(1) >> reverb;
@@ -42,10 +43,10 @@ void ofApp::setup(){
 
     // OSC mapping -----------------------------
     osc.linkTempo( "/orca/tempo" );
-    oscMapping( "/a", 0 );
-    oscMapping( "/b", 1 );
-    oscMapping( "/c", 2 );
-    oscMapping( "/d", 3 );
+    oscMapping( "/x", 0, 0 );
+    oscMapping( "/x", 1, 8 );
+    oscMapping( "/y", 2, 0 );
+    oscMapping( "/y", 3, 8 );
     
     // graphic setup---------------------------
     ofSetVerticalSync(true);
@@ -91,16 +92,16 @@ void ofApp::setup(){
 
         
 //--------------------------------------------------------------
-void ofApp::oscMapping( std::string address, int index ){
+void ofApp::oscMapping( std::string address, int index, int offset ){
 
-    osc.out_trig( address, 0 ) >> synths[index].in("trig");  
-    osc.parser( address, 0 ) = [&, index]( float value ) noexcept {
+    osc.out_trig( address, 0 + offset ) >> synths[index].in("trig");  
+    osc.parser( address, 0 + offset ) = [&, index]( float value ) noexcept {
         if( value==synths[index].lastTrigger ){ return pdsp::osc::Ignore;
         }else{ synths[index].lastTrigger = value; return value;  }
     };
     
-    osc.out_value( address, 1 ) >> synths[index].in("ratio");
-    osc.parser( address, 1 ) = [&, index]( float value ) noexcept {
+    osc.out_value( address, 1 + offset ) >> synths[index].in("ratio");
+    osc.parser( address, 1 + offset  ) = [&, index]( float value ) noexcept {
         if( value==0.0f ){ 
             return 0.5f;
         }else if( value>=17.0f ){
@@ -110,10 +111,10 @@ void ofApp::oscMapping( std::string address, int index ){
         }
     };
     
-    osc.out_value( address, 2 ) * 12.0f     >> synths[index].in("pitch");
+    osc.out_value( address, 2 + offset  ) * 12.0f     >> synths[index].in("pitch");
     
-    osc.out_value( address, 3 ) >> synths[index].in("pitch");
-    osc.parser( address, 3 ) = [&]( float value ) noexcept {
+    osc.out_value( address, 3 + offset  ) >> synths[index].in("pitch");
+    osc.parser( address, 3 + offset  ) = [&]( float value ) noexcept {
         int i = value;
         float p = table.pitches[i%table.degrees];
         int o = i / table.degrees;
@@ -121,23 +122,18 @@ void ofApp::oscMapping( std::string address, int index ){
         return p;  
     };
 
-    osc.out_value( address, 4 ) * 0.03f >> synths[index].in("fb_amount");
-    osc.out_value( address, 5 ) * 0.1f >> synths[index].in("fm_amount");
-    osc.out_value( address, 6 ) * 0.125f >> synths[index].in("other_amount");
+    osc.out_value( address, 4 + offset  ) * 0.03f >> synths[index].in("fb_amount");
+    osc.out_value( address, 5 + offset  ) * 0.1f >> synths[index].in("fm_amount");
+    osc.out_value( address, 6 + offset  ) * 0.125f >> synths[index].in("other_amount");
 
-    osc.out_value( address, 7 ) >> synths[index].in("decay");
-    osc.parser( address, 7 ) = [&]( float value ) noexcept {
+    osc.out_value( address, 7 + offset  ) >> synths[index].in("decay");
+    osc.parser( address, 7 + offset  ) = [&]( float value ) noexcept {
         value *= 0.112;
         value = (value<1.0) ? value : 1.0;
         value = value * value * 4000.0f;
         return value;  
     };        
-    
-    osc.out_trig( address, 8 ) >> synths[index].in("trig_other");  
-    osc.parser( address, 8 ) = [&, index]( float value ) noexcept {
-        if( value==synths[index].lastOtherTrigger ){ return pdsp::osc::Ignore;
-        }else{ synths[index].lastOtherTrigger = value; return value;  }
-    };
+
 }
 
 //--------------------------------------------------------------

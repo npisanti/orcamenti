@@ -29,7 +29,7 @@ class ofApp : public ofBaseApp{
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
         
-        void oscMapping( std::string address, int index );
+        void oscMapping( std::string address, int index, int offset );
         
         pdsp::Engine        engine;   
         pdsp::osc::Input    osc;

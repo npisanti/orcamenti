@@ -39,9 +39,6 @@ private:
     pdsp::Amp           fmAmp;
     pdsp::Amp           voiceAmp;
 
-    pdsp::ADSR          otherEnv;    
-    pdsp::Amp           otherAmp;
-
     pdsp::ADSR          ampEnv;    
     pdsp::ADSR          modEnv;    
             
