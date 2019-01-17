@@ -23,8 +23,8 @@ void ofApp::setup(){
     }
     
     for( int i=0; i<NUMSYNTHS; ++i ){
-        synths[i].out("gain") * pdsp::panL(pdsp::spread(i, NUMSYNTHS, 0.5f) ) >> engine.audio_out(0);
-        synths[i].out("gain") * pdsp::panR(pdsp::spread(i, NUMSYNTHS, 0.5f) ) >> engine.audio_out(1);  
+        synths[i].out("gain") * pdsp::panL(pdsp::spread(i, NUMSYNTHS, 0.7f) ) >> engine.audio_out(0);
+        synths[i].out("gain") * pdsp::panR(pdsp::spread(i, NUMSYNTHS, 0.7f) ) >> engine.audio_out(1);  
     }
 
     synths[0].out("signal") >> synths[1].in("other");
