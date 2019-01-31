@@ -86,7 +86,7 @@ void ofApp::setup(){
     engine.addOscInput ( osc );
     
     engine.listDevices();
-    engine.setDeviceID(0); // REMEMBER TO SET THIS AT THE RIGHT INDEX!!!!
+    engine.setDeviceID(5); // REMEMBER TO SET THIS AT THE RIGHT INDEX!!!!
     engine.setup( 44100, 512, 3);     
 }
 
