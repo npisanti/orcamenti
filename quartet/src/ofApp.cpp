@@ -43,10 +43,7 @@ void ofApp::setup(){
 
     // OSC mapping -----------------------------
     osc.linkTempo( "/orca/tempo" );
-    oscMapping( "/x", 0, 0 );
-    oscMapping( "/x", 1, 8 );
-    oscMapping( "/y", 2, 0 );
-    oscMapping( "/y", 3, 8 );
+    oscMapping();
     
     // graphic setup---------------------------
     ofSetVerticalSync(true);
@@ -92,47 +89,52 @@ void ofApp::setup(){
 
         
 //--------------------------------------------------------------
-void ofApp::oscMapping( std::string address, int index, int offset ){
+void ofApp::oscMapping(){
 
-    osc.out_trig( address, 0 + offset ) >> synths[index].in("trig");  
-    osc.parser( address, 0 + offset ) = [&, index]( float value ) noexcept {
-        if( value==synths[index].lastTrigger ){ return pdsp::osc::Ignore;
-        }else{ synths[index].lastTrigger = value; return value;  }
-    };
-    
-    osc.out_value( address, 1 + offset ) >> synths[index].in("ratio");
-    osc.parser( address, 1 + offset  ) = [&, index]( float value ) noexcept {
-        if( value==0.0f ){ 
-            return 0.5f;
-        }else if( value>=17.0f ){
-             return 17.0f;
-        }else{
-            return value;
-        }
-    };
-    
-    osc.out_value( address, 2 + offset  ) * 12.0f     >> synths[index].in("pitch");
-    
-    osc.out_value( address, 3 + offset  ) >> synths[index].in("pitch");
-    osc.parser( address, 3 + offset  ) = [&]( float value ) noexcept {
-        int i = value;
-        float p = table.pitches[i%table.degrees];
-        int o = i / table.degrees;
-        p += o*12.0f;
-        return p;  
-    };
+    for( int index = 0; index< NUMSYNTHS; ++index ){
+        std::cout<< "MAPPING SYNTH "<<index<<"\n";
+        osc.out_trig("/x", index) >> synths[index].in("trig");  
+        osc.parser("/x", index) = [&, index]( float value ) noexcept {
+            if( value==synths[index].lastTrigger ){ return pdsp::osc::Ignore;
+            }else{ synths[index].lastTrigger = value; return value;  }
+        };
+        
+        osc.out_value("/x", index+NUMSYNTHS) >> synths[index].in("pitch");
+        osc.parser("/x", index+NUMSYNTHS) = [&]( float value ) noexcept {
+            int i = value;
+            float p = table.pitches[i%table.degrees];
+            int o = i / table.degrees;
+            p += o*12.0f;
+            return p;  
+        };        
+        
+        osc.out_value("/c", index) * 0.125f >> synths[index].in("other_amount");
 
-    osc.out_value( address, 4 + offset  ) * 0.03f >> synths[index].in("fb_amount");
-    osc.out_value( address, 5 + offset  ) * 0.1f >> synths[index].in("fm_amount");
-    osc.out_value( address, 6 + offset  ) * 0.125f >> synths[index].in("other_amount");
+        osc.out_value("/r", index) >> synths[index].in("ratio");
+        osc.parser("/r", index) = [&, index]( float value ) noexcept {
+            if( value==0.0f ){ 
+                return 0.5f;
+            }else if( value>=17.0f ){
+                 return 17.0f;
+            }else{
+                return value;
+            }
+        };
 
-    osc.out_value( address, 7 + offset  ) >> synths[index].in("decay");
-    osc.parser( address, 7 + offset  ) = [&]( float value ) noexcept {
-        value *= 0.112;
-        value = (value<1.0) ? value : 1.0;
-        value = value * value * 4000.0f;
-        return value;  
-    };        
+        osc.out_value("/o", index) * 12.0f     >> synths[index].in("pitch");
+            
+        osc.out_value("/s", index) * 0.03f >> synths[index].in("fb_amount");        
+
+        osc.out_value("/f", index) * 0.1f >> synths[index].in("fm_amount");
+
+        osc.out_value("/e", index) >> synths[index].in("decay");
+        osc.parser("/e", index) = [&]( float value ) noexcept {
+            value *= 0.112;
+            value = (value<1.0) ? value : 1.0;
+            value = value * value * 4000.0f;
+            return value;  
+        };      
+    }
 
 }
 
