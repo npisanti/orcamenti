@@ -27,7 +27,7 @@
 	<datasynth>
 		<gain>-15</gain>
 		<wave_smoothing>0.1</wave_smoothing>
-		<filter_cutoff>61</filter_cutoff>
+		<filter_cutoff>120</filter_cutoff>
 		<env_attack>1000</env_attack>
 		<env_decay>400</env_decay>
 		<env_sustain>1</env_sustain>

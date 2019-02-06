@@ -206,7 +206,7 @@ void ofApp::oscMapping(){
     };        
 
     osc.parser("/v", 3) = [&]( float value ) noexcept {
-        fragamount = value / 8.0f;
+        fragamount = value / 16.0f;
         return pdsp::osc::Ignore;
     };        
 
@@ -239,7 +239,7 @@ void ofApp::update(){
             default: case 0: break;
             
             case 1:
-                twist.amount = amount;
+                twist.amount = amount * amount * amount * 0.5f;
                 twist.apply( process );
             break;
         }
