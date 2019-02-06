@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<TUNING>
+	<modal_table>
+		<master_pitch>36</master_pitch>
+		<d0_numerator>10</d0_numerator>
+		<d0_denominator>10</d0_denominator>
+		<d1_numerator>12</d1_numerator>
+		<d1_denominator>10</d1_denominator>
+		<d2_numerator>13</d2_numerator>
+		<d2_denominator>10</d2_denominator>
+		<d3_numerator>15</d3_numerator>
+		<d3_denominator>10</d3_denominator>
+		<d4_numerator>16</d4_numerator>
+		<d4_denominator>10</d4_denominator>
+		<d5_numerator>18</d5_numerator>
+		<d5_denominator>10</d5_denominator>
+	</modal_table>
+</TUNING>

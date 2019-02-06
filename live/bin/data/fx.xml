@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<FX>
+	<stereo_delay>
+		<input_gain>-18</input_gain>
+		<L_16th_time>4</L_16th_time>
+		<L_feedback>0.3</L_feedback>
+		<R_16th_time>4</R_16th_time>
+		<R_feedback>0.3</R_feedback>
+		<damping>0.5</damping>
+		<mod_speed__hz_>0.25</mod_speed__hz_>
+		<mod_depth__ms_>0</mod_depth__ms_>
+		<output_gain>0</output_gain>
+	</stereo_delay>
+	<reverb_gain>-12</reverb_gain>
+</FX>

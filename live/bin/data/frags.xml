@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<FRAGS>
+	<monochrome>
+		<active>1</active>
+	</monochrome>
+	<HSB>
+		<active>1</active>
+		<hue>0</hue>
+		<brightness>0</brightness>
+		<saturation>1</saturation>
+		<contrast>1.3</contrast>
+	</HSB>
+	<twist>
+		<active>1</active>
+		<amount>1</amount>
+		<variation>0.5</variation>
+	</twist>
+</FRAGS>
