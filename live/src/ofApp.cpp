@@ -322,28 +322,28 @@ void ofApp::draw(){
         ofDrawRectangle( bandsSeparation, 0, bandsWidth, ofGetHeight() );
     ofPopMatrix();
 
-    ofPushMatrix();
-    ofTranslate( (ofGetWidth()-CAMW)/2, 0);
+    polyicon.draw( (ofGetWidth()-CAMW)/2, iconOffset, 320, 320 );
+    
+    ofPushMatrix();    
 
-    polyicon.draw( 0, iconOffset, 320, 320 );
-    
-    ofTranslate( 0, camOffset );
-    
-    ofSetColor( 255 );
-    process.draw(0, 0);
-    
-    ofSetColor( bandsColor );
-    ofDrawLine(  col, 0, col, CAMH );
+        ofTranslate( (ofGetWidth()+CAMH)/2, camOffset + CAMH );
+        ofRotateRad( M_PI_2 );
 
-    float max = 0.0f;
-    ofNoFill();
-    for( size_t i=0; i<dtsynth.voices.size(); ++i ){
-        float env = dtsynth.voices[i].meter_env();
-        if( env > max ){ max = env; }
-    }
-    ofSetColor( waveColor, max * 255 );
-    waveplot.draw( 0, 0 );
-    
+        
+        ofSetColor( 255 );
+        process.draw(0, 0);
+        
+        ofSetColor( bandsColor );
+        ofDrawLine(  col, 0, col, CAMH );
+
+        float max = 0.0f;
+        ofNoFill();
+        for( size_t i=0; i<dtsynth.voices.size(); ++i ){
+            float env = dtsynth.voices[i].meter_env();
+            if( env > max ){ max = env; }
+        }
+        ofSetColor( waveColor, max * 255 );
+        waveplot.draw( 0, 0 );
     ofPopMatrix();
     
     if(bDrawGui){
@@ -358,6 +358,7 @@ void ofApp::draw(){
 void ofApp::keyPressed(int key){
     switch( key ){
         case 'g': bDrawGui = !bDrawGui; break;
+        case 'v': webcam.videoSettings(); break;
     }
 }
 

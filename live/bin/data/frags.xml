@@ -19,7 +19,7 @@
 	</twist>
 	<graphis>
 		<bands_color>88, 110, 117, 255</bands_color>
-		<cam_offset>570</cam_offset>
+		<cam_offset>260</cam_offset>
 		<icon_offset>76</icon_offset>
 		<bands_width>25</bands_width>
 		<bands_separation>35</bands_separation>
