@@ -1,5 +1,7 @@
 #pragma once
 
+#define NUMSYNTHS 4
+
 #include "ofMain.h"
 #include "ofxMidi.h"
 #include "ofxPDSP.h"
@@ -10,6 +12,7 @@
 #include "synth/DataSynth.h"
 #include "effect/Chorus.h"
 #include "effect/Filter.h"
+#include "meter/RMS.h"
 #include "ofxDotFrag.h"
 
 class ofApp : public ofBaseApp{
@@ -72,5 +75,24 @@ class ofApp : public ofBaseApp{
         
         std::atomic<int> select;
         std::atomic<float> fragamount;
-
+        
+        ofx::dotfrag::Live polyicon;
+        ofParameter<glm::vec4> envelopes;
+        ofParameter<glm::vec4> crossmods;
+        
+        std::atomic<float> meter_cross[NUMSYNTHS];
+        
+        bool bDrawGui;
+        
+        ofParameter<ofColor> bandsColor;
+        ofParameter<int> bandsWidth;
+        ofParameter<int> bandsSeparation;
+        ofParameter<int> camOffset;
+        ofParameter<int> iconOffset;
+        ofParameter<float> bandsThreshold;
+        ofParameterGroup graphics;
+        ofParameter<ofColor> waveColor;
+        
+        np::meter::RMS meterL;
+        np::meter::RMS meterR;
 };

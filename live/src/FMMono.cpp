@@ -68,8 +68,8 @@ void np::synth::FMMono::onAttack( float & value ){
     env_attack_ctrl.set( value );
 }
 
-float np::synth::FMMono::meter_mod_env() const{
-    return modEnv.meter_output();
+float np::synth::FMMono::meter_env() const{
+    return ampEnv.meter_output();
 }
 
 float np::synth::FMMono::meter_pitch() const{

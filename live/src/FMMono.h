@@ -16,7 +16,7 @@ public:
     
     void patch();
     
-    float meter_mod_env() const;
+    float meter_env() const;
     float meter_pitch() const;
     
     ofParameterGroup    parameters;

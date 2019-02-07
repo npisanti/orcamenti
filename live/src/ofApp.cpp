@@ -1,15 +1,16 @@
 
 #include "ofApp.h"
 
-#define NUMSYNTHS 4
 #define CAMW 320
 #define CAMH 240
 
 //--------------------------------------------------------------
 void ofApp::setup(){
     
-    ofSetWindowTitle("fm quartet");
+    ofSetWindowTitle("engine");
     engine.score.setTempo( 120.0f); // the delay times are clocked
+
+    bDrawGui = false;
 
     osc.setVerbose( true );
     osc.openPort( 4444 );
@@ -29,13 +30,16 @@ void ofApp::setup(){
         synths[i].out("gain") * pdsp::panR(pdsp::spread(i, NUMSYNTHS, 0.7f) ) >> engine.audio_out(1);  
     }
 
-    synths[0].out("signal") >> synths[1].in("other");
     synths[1].out("signal") >> synths[0].in("other");
-    synths[2].out("signal") >> synths[3].in("other");
+    synths[2].out("signal") >> synths[1].in("other");
     synths[3].out("signal") >> synths[2].in("other");
+    synths[0].out("signal") >> synths[3].in("other");
 
     delays.ch(0) >> reverb;
     delays.ch(1) >> reverb;
+    
+    delays.ch(0) >> meterL >> engine.blackhole();
+    delays.ch(1) >> meterR >> engine.blackhole();
     
     reverb.ch(0) >> engine.audio_out(0);
     reverb.ch(1) >> engine.audio_out(1);
@@ -86,11 +90,6 @@ void ofApp::setup(){
     ofSetFrameRate(24);
 
     // GUI -----------------------------------
-    ofxGuiSetHeaderColor(ofColor( 40, 0, 0));
-    ofxGuiSetBorderColor(ofColor(40, 0, 0));
-    
-    ofxGuiSetFillColor(ofColor(255, 85, 85));
-    ofxGuiSetBackgroundColor(ofColor(0,0,0));
 
     synthsGUI.setup("SYNTHS", "synths.xml", 220, 10);
         synthsGUI.add( synths[0].label("fm synth A") );
@@ -102,20 +101,37 @@ void ofApp::setup(){
         synthsGUI.add( chorus.parameters );
     synthsGUI.loadFromFile("synths.xml");
     
-    fxGUI.setup("FX", "fx.xml", 430, 10);
+    fxGUI.setup("FX", "fx.xml", 10, 320);
         fxGUI.add( delays.parameters );
         fxGUI.add( reverbGain.set("reverb gain", -12, -36, 0 ) );
     fxGUI.loadFromFile( "fx.xml" );
     
-    fragGUI.setup("FRAGS", "frags.xml", 640, 10 );
-        fragGUI.add( monochrome.parameters );
-        fragGUI.add( hsb.parameters );
-        fragGUI.add( twist.parameters );
-    fragGUI.loadFromFile( "frags.xml" );
-    
     tuningGUI.setup("TUNING", "tuning.xml", 10, 10 );
     tuningGUI.add( table.parameters );
     tuningGUI.loadFromFile( "tuning.xml" );
+        
+    fragGUI.setup("FRAGS", "frags.xml", 10, 600 );
+        fragGUI.add( monochrome.parameters );
+        fragGUI.add( hsb.parameters );
+        fragGUI.add( twist.parameters );
+        
+        graphics.setName("graphis");
+            graphics.add( waveColor.set("wave color", ofColor(255), ofColor(0), ofColor(255) ) );
+            graphics.add( bandsColor.set("bands color", ofColor(255), ofColor(0), ofColor(255) ) );
+            graphics.add( camOffset.set( "cam offset", 0, 0, ofGetHeight()));
+            graphics.add( iconOffset.set( "icon offset", 320, 0, ofGetHeight()));
+            graphics.add( bandsWidth.set("bands width", 60, 0, 200) );
+            graphics.add( bandsSeparation.set("bands separation", 10, 0, 200) );
+            graphics.add( bandsThreshold.set("bands threshold", 1.0f, 0.0f, 1.0f) );
+            graphics.add( meterL.label("meter L") );
+            graphics.add( meterR.label("meter R") );
+        fragGUI.add( graphics );
+    fragGUI.loadFromFile( "frags.xml" );
+    
+
+    polyicon.load( ofToDataPath("polyicon.frag"));
+    polyicon.uniform( envelopes.set( "envelopes", glm::vec4(0),glm::vec4(0),glm::vec4(1) ), "u_envelopes" );
+    polyicon.uniform( crossmods.set( "crossmods", glm::vec4(0),glm::vec4(0),glm::vec4(1) ), "u_crossmods" );
     
     // audio setup----------------------------
     engine.sequencer.play();
@@ -150,6 +166,11 @@ void ofApp::oscMapping(){
         };        
         
         osc.out_value("/c", index) * 0.125f >> synths[index].in("other_amount");
+        osc.parser("/c", index) = [&, index]( float value ) noexcept {
+            float crossmodulating = (value>0.0f) ? 1.0f : 0.0f;
+            meter_cross[index].store(crossmodulating);
+            return value;  
+        };      
 
         osc.out_value("/r", index) >> synths[index].in("ratio");
         osc.parser("/r", index) = [&, index]( float value ) noexcept {
@@ -218,6 +239,7 @@ void ofApp::update(){
     webcam.update();
     if( webcam.isFrameNew() ){
         camfbo.begin();
+            ofClear( 0, 0, 0, 0 );
             ofSetColor( 255 );
             webcam.draw( 0, 0 );
         camfbo.end();
@@ -261,10 +283,8 @@ void ofApp::update(){
     
         waveplot.begin();
 		ofClear(0, 0, 0, 0);
-		
 		ofSetColor(255);
-		ofDrawRectangle(1, 1, waveplot.getWidth()-2, waveplot.getHeight()-2);
-		ofTranslate(2, 2);
+        
 		// plot the raw waveforms
         ofBeginShape();
         for(int n=0; n<CAMH; ++n){
@@ -276,34 +296,69 @@ void ofApp::update(){
 		waveplot.end();
     }
     
+    envelopes.set( glm::vec4( synths[0].meter_env(), synths[1].meter_env(), synths[2].meter_env(), synths[3].meter_env() ));
+    
+    float cross0 = meter_cross[0] * synths[1].meter_env();
+    float cross1 = meter_cross[1] * synths[2].meter_env();
+    float cross2 = meter_cross[2] * synths[3].meter_env();
+    float cross3 = meter_cross[3] * synths[0].meter_env();   
+    crossmods.set( glm::vec4( cross0, cross1, cross2, cross3 ) );
+
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-    tuningGUI.draw();
-    synthsGUI.draw();
-    fxGUI.draw();
-    fragGUI.draw();
 
-    ofTranslate( 460, 500);
+    ofPushMatrix();
+        ofTranslate( ofGetWidth()/2, 0 );
+        ofFill();
+        
+        float delayLrms = ofMap( meterL.meter(), 0.0f, bandsThreshold, 0, 255, true );
+        ofSetColor( bandsColor, delayLrms );
+        ofDrawRectangle( -bandsSeparation, 0, -bandsWidth, ofGetHeight() );
+
+        float delayRrms = ofMap( meterR.meter(), 0.0f, bandsThreshold, 0, 255, true );
+        ofSetColor( bandsColor, delayRrms );
+        ofDrawRectangle( bandsSeparation, 0, bandsWidth, ofGetHeight() );
+    ofPopMatrix();
+
+    ofPushMatrix();
+    ofTranslate( (ofGetWidth()-CAMW)/2, 0);
+
+    polyicon.draw( 0, iconOffset, 320, 320 );
     
-    ofSetColor(255);
+    ofTranslate( 0, camOffset );
+    
+    ofSetColor( 255 );
     process.draw(0, 0);
+    
+    ofSetColor( bandsColor );
     ofDrawLine(  col, 0, col, CAMH );
 
     float max = 0.0f;
+    ofNoFill();
     for( size_t i=0; i<dtsynth.voices.size(); ++i ){
         float env = dtsynth.voices[i].meter_env();
         if( env > max ){ max = env; }
     }
-    ofSetColor( 255, max * 255 );
+    ofSetColor( waveColor, max * 255 );
     waveplot.draw( 0, 0 );
     
+    ofPopMatrix();
+    
+    if(bDrawGui){
+        tuningGUI.draw();
+        synthsGUI.draw();
+        fxGUI.draw();
+        fragGUI.draw();
+    }
 }
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
-
+    switch( key ){
+        case 'g': bDrawGui = !bDrawGui; break;
+    }
 }
 
 //--------------------------------------------------------------
