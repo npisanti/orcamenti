@@ -2,23 +2,25 @@
 <FRAGS>
 	<monochrome>
 		<active>1</active>
+		<low>0</low>
+		<high>0.6</high>
 	</monochrome>
 	<HSB>
 		<active>1</active>
 		<hue>0</hue>
-		<brightness>0</brightness>
+		<brightness>-0.1</brightness>
 		<saturation>1</saturation>
-		<contrast>1.3</contrast>
+		<contrast>2</contrast>
 	</HSB>
 	<twist>
 		<active>1</active>
-		<amount>0.0263672</amount>
+		<amount>0</amount>
 		<variation>0.5</variation>
 	</twist>
 	<graphis>
 		<bands_color>88, 110, 117, 255</bands_color>
 		<cam_offset>570</cam_offset>
-		<icon_offset>150</icon_offset>
+		<icon_offset>76</icon_offset>
 		<bands_width>25</bands_width>
 		<bands_separation>35</bands_separation>
 		<bands_threshold>0.260204</bands_threshold>

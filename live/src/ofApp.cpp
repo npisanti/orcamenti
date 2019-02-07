@@ -63,7 +63,7 @@ void ofApp::setup(){
     webcam.initGrabber( CAMW, CAMH );
     
     dtsynth.datatable.setup( CAMH, CAMH ); // as many samples as the webcam width
-    col = CAMW/2;
+    col = 40;
     waveplot.allocate( CAMW, CAMH );
     
     camfbo.allocate( CAMW, CAMH );
@@ -213,7 +213,7 @@ void ofApp::oscMapping(){
             p += o*12.0f;
             return p;  
         };        
-        osc.out_value("/p", index).enableSmoothing( 100.0f );
+        osc.out_value("/p", index).enableSmoothing( 75.0f );
     }
     
     osc.out_value("/v", 0 ) * 15.0 >> filter.in_cutoff();
