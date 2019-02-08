@@ -8,7 +8,7 @@
 //--------------------------------------------------------------
 void ofApp::setup(){
     
-    ofSetWindowTitle("engine");
+    ofSetWindowTitle("|::|");
     engine.score.setTempo( 120.0f); // the delay times are clocked
 
     bDrawGui = false;
