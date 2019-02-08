@@ -26,7 +26,7 @@
 	</fm_synth_D>
 	<datasynth>
 		<gain>-15</gain>
-		<wave_smoothing>0.2</wave_smoothing>
+		<wave_smoothing>0.7</wave_smoothing>
 		<filter_cutoff>120</filter_cutoff>
 		<env_attack>1000</env_attack>
 		<env_decay>400</env_decay>

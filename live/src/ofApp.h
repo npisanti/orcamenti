@@ -93,6 +93,10 @@ class ofApp : public ofBaseApp{
         ofParameterGroup graphics;
         ofParameter<ofColor> waveColor;
         
+        ofParameterGroup calibration;
+        ofParameter<int> offX;
+        ofParameter<int> offY;
+        
         np::meter::RMS meterL;
         np::meter::RMS meterR;
 };

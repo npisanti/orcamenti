@@ -1,7 +1,8 @@
 
 #include "ofApp.h"
 
-#define CAMW 320
+#define FRAGW 320
+#define CAMW 240
 #define CAMH 240
 
 //--------------------------------------------------------------
@@ -60,7 +61,7 @@ void ofApp::setup(){
 
     webcam.setDeviceID(0);
     webcam.setDesiredFrameRate(60);
-    webcam.initGrabber( CAMW, CAMH );
+    webcam.initGrabber( 640, 480 );
     
     dtsynth.datatable.setup( CAMH, CAMH ); // as many samples as the webcam width
     col = 40;
@@ -111,6 +112,11 @@ void ofApp::setup(){
     tuningGUI.loadFromFile( "tuning.xml" );
         
     fragGUI.setup("FRAGS", "frags.xml", 10, 600 );
+        calibration.setName( "calibration" );
+        calibration.add( offX.set("off x", 0, 0, 640) );
+        calibration.add( offY.set("off y", 0, 0, 480) );
+        fragGUI.add( calibration );
+        
         fragGUI.add( monochrome.parameters );
         fragGUI.add( hsb.parameters );
         fragGUI.add( twist.parameters );
@@ -241,7 +247,7 @@ void ofApp::update(){
         camfbo.begin();
             ofClear( 0, 0, 0, 0 );
             ofSetColor( 255 );
-            webcam.draw( 0, 0 );
+            webcam.draw( -offX, -offY );
         camfbo.end();
         hsb.apply( camfbo );
         monochrome.apply( camfbo );
@@ -322,14 +328,12 @@ void ofApp::draw(){
         ofDrawRectangle( bandsSeparation, 0, bandsWidth, ofGetHeight() );
     ofPopMatrix();
 
-    polyicon.draw( (ofGetWidth()-CAMW)/2, iconOffset, 320, 320 );
+    polyicon.draw( (ofGetWidth()-FRAGW)/2, iconOffset, FRAGW, FRAGW );
     
     ofPushMatrix();    
-
         ofTranslate( (ofGetWidth()+CAMH)/2, camOffset + CAMH );
         ofRotateRad( M_PI_2 );
 
-        
         ofSetColor( 255 );
         process.draw(0, 0);
         
@@ -342,7 +346,7 @@ void ofApp::draw(){
             float env = dtsynth.voices[i].meter_env();
             if( env > max ){ max = env; }
         }
-        ofSetColor( waveColor, max * 255 );
+        ofSetColor( waveColor, max * 160 );
         waveplot.draw( 0, 0 );
     ofPopMatrix();
     
