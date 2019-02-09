@@ -39,5 +39,7 @@
 	<calibration>
 		<off_x>0</off_x>
 		<off_y>160</off_y>
+		<line_min>40</line_min>
+		<line_step>6</line_step>
 	</calibration>
 </FRAGS>

@@ -76,6 +76,7 @@ void ofApp::setup(){
 
     select = 0;
     fragamount = 0.0f;
+    linecontrol = 0;
 
     // OSC mapping -----------------------------
     osc.linkTempo( "/orca/tempo" );
@@ -115,6 +116,8 @@ void ofApp::setup(){
         calibration.setName( "calibration" );
         calibration.add( offX.set("off x", 0, 0, 640) );
         calibration.add( offY.set("off y", 0, 0, 480) );
+        calibration.add( linemin.set("line min", 40, 0, CAMW) );
+        calibration.add( linestep.set("line step", 5, 1, 20) );
         fragGUI.add( calibration );
         
         fragGUI.add( monochrome.parameters );
@@ -221,18 +224,24 @@ void ofApp::oscMapping(){
         };        
         osc.out_value("/p", index).enableSmoothing( 75.0f );
     }
+
     
-    osc.out_value("/v", 0 ) * 15.0 >> filter.in_cutoff();
-    osc.out_value("/v", 0 ).enableSmoothing( 2500.0f ); 
-    osc.out_value("/v", 1 ) * 12.0 >> filter.in_cutoff();
-    osc.out_value("/v", 1 ).enableSmoothing( 20.0f ); 
+    osc.parser("/v", 0) = [&]( float value ) noexcept {
+        linecontrol = value;
+        return pdsp::osc::Ignore;
+    };      
     
-    osc.parser("/v", 2) = [&]( float value ) noexcept {
+    osc.out_value("/v", 1 ) * 15.0 >> filter.in_cutoff();
+    osc.out_value("/v", 1 ).enableSmoothing( 3000.0f ); 
+    osc.out_value("/v", 2 ) * 12.0 >> filter.in_cutoff();
+    osc.out_value("/v", 2 ).enableSmoothing( 20.0f ); 
+    
+    osc.parser("/v", 3) = [&]( float value ) noexcept {
         select = value;
         return pdsp::osc::Ignore;
     };        
 
-    osc.parser("/v", 3) = [&]( float value ) noexcept {
+    osc.parser("/v", 4) = [&]( float value ) noexcept {
         fragamount = value / 16.0f;
         return pdsp::osc::Ignore;
     };        
@@ -292,9 +301,11 @@ void ofApp::update(){
 		ofSetColor(255);
         
 		// plot the raw waveforms
+        int xmin = CAMW * 0.95;
+        int xmax = CAMW * 0.05;
         ofBeginShape();
         for(int n=0; n<CAMH; ++n){
-            float x = ofMap(pixels.getData()[col*4 + n*4*CAMW], 0, 255, CAMW, 0);
+            float x = ofMap(pixels.getData()[col*4 + n*4*CAMW], 0, 255, xmin, xmax);
             ofVertex( x, n );
         }
         ofEndShape(false);
@@ -310,6 +321,7 @@ void ofApp::update(){
     float cross3 = meter_cross[3] * synths[0].meter_env();   
     crossmods.set( glm::vec4( cross0, cross1, cross2, cross3 ) );
 
+    col = linecontrol*linestep + linemin;
 }
 
 //--------------------------------------------------------------
@@ -336,6 +348,13 @@ void ofApp::draw(){
 
         ofSetColor( 255 );
         process.draw(0, 0);
+        
+        ofSetColor( 100, 130 );
+        for( int n=0; n<32; ++n ){
+            int x = linemin + linestep * n;
+            ofDrawLine( x, 0, x, CAMH*0.05 );
+            ofDrawLine( x, CAMH*0.95, x, CAMH );
+        }
         
         ofSetColor( bandsColor );
         ofDrawLine(  col, 0, col, CAMH );

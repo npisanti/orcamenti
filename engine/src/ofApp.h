@@ -75,6 +75,7 @@ class ofApp : public ofBaseApp{
         
         std::atomic<int> select;
         std::atomic<float> fragamount;
+        std::atomic<int> linecontrol;
         
         ofx::dotfrag::Live polyicon;
         ofParameter<glm::vec4> envelopes;
@@ -96,6 +97,8 @@ class ofApp : public ofBaseApp{
         ofParameterGroup calibration;
         ofParameter<int> offX;
         ofParameter<int> offY;
+        ofParameter<int> linemin;
+        ofParameter<int> linestep;
         
         np::meter::RMS meterL;
         np::meter::RMS meterR;
