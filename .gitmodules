@@ -1,0 +1,3 @@
+[submodule "orca-snippets"]
+	path = orca-snippets
+	url = https://github.com/npisanti/orca-snippets.git
