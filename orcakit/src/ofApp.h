@@ -9,10 +9,10 @@
 #include "FMSub.h"
 #include "SinePercussion.h"
 #include "NoiseDevice.h"
-#include "ModalTable.h"
 #include "StereoDelay.h"
 #include "dynamics/Brickwall.h"
 #include "ofxDotFrag.h"
+#include "HQSaturator.h"
 
 class ofApp : public ofBaseApp{
 
@@ -45,17 +45,24 @@ class ofApp : public ofBaseApp{
         np::synth::FMSub sub;
         float subgate = 0.0f;
         
-        np2::synth::NoiseDevice  noise;
+        np2::synth::NoiseDevice  noiseN;
+        np2::synth::NoiseDevice  noiseM;
+        
         np2::synth::SinePercussion kick;
         
+        np2::effect::HQSaturator lowEndSaturation;
+        
+        pdsp::OneMinusInput envInvert;
+        pdsp::Amp           noiseduck0;
+        pdsp::Amp           noiseduck1;
         
         pdsp::ParameterGain reverbGain;
         pdsp::BasiVerb    reverb;
         npl::effect::StereoDelay delays;
 
-        np::tuning::ModalTable table;
-        
-        ofxPanel gui;
+        ofxPanel lowendUI;
+        ofxPanel noiseUI;
+        ofxPanel fxUI;
         bool bDrawGui;
         
         np::dynamics::Brickwall limiter;

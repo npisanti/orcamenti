@@ -4,14 +4,13 @@
 void np2::synth::NoiseDevice::patch() {
   
     addModuleInput ( "trig", trigger );
-    addModuleInput ( "pitch", noise.in_pitch() );
-    addModuleInput ( "decimate", noise.in_decimation() );
-    addModuleInput ( "filter", filter.in_cutoff() );
+    addModuleInput ( "mod", seqMod );
     addModuleInput ( "hold", ampEnv.in_hold() );
     //addModuleInput ( "release", ampEnv.in_release() );
 
     addModuleOutput( "L", gain0 );
     addModuleOutput( "R", gain1 );
+    addModuleOutput( "env", ampEnv );
     
     noise.ch(0) >> filter.ch(0) >> amp0 >> gain0;
     noise.ch(1) >> filter.ch(1) >> amp1 >> gain1;
@@ -39,6 +38,10 @@ void np2::synth::NoiseDevice::patch() {
     modEnv >> modFilterAmt >> filter.in_cutoff();
     modEnv >> modPitchAmt >> noise.in_pitch();
     modEnv >> modDecimateAmt >> noise.in_decimation();
+
+    seqMod >> seqToPitch >> noise.in_pitch();
+    seqMod >> seqToCutoff >> filter.in_cutoff();
+    seqMod >> seqToDecimate >> noise.in_decimation();
 
     filterTypeControl   >> filter.in_mode();
     filterCutoffControl >> filter.in_cutoff();
@@ -72,7 +75,11 @@ void np2::synth::NoiseDevice::patch() {
     parameters.add( modDecimateAmt.set("mEnv to decimation", 0, 0, 120 ) );    
     parameters.add( modFilterAmt.set("mEnv to filter", 0, 0, 120 ) );    
     parameters.add( randomControl.set("random", 0, 0, 66 ) );    
-    parameters.add( randomCutoffControl.set("random cutoff", 0, 0, 66 ) );    
+    parameters.add( randomCutoffControl.set("random cutoff", 0, 0, 66 ) );  
+    parameters.add( seqToPitch.set("seq to pitch", 0.0f, -12.0f, 12.0f ) );  
+    parameters.add( seqToCutoff.set("seq to cutoff", 0.0f, -12.0f, 12.0f ) );  
+    parameters.add( seqToDecimate.set("seq to decimate", 0.0f, -12.0f, 12.0f ) );  
+      
     
 }
 
@@ -88,14 +95,11 @@ float np2::synth::NoiseDevice::meter() const {
 pdsp::Patchable & np2::synth::NoiseDevice::in_trig(){
     return in("trig");
 }
-pdsp::Patchable & np2::synth::NoiseDevice::in_pitch(){
-    return in("pitch");
+pdsp::Patchable & np2::synth::NoiseDevice::in_mod(){
+    return in("mod");
 }
-pdsp::Patchable & np2::synth::NoiseDevice::in_cutoff(){
-    return in("cutoff");
-}
-pdsp::Patchable & np2::synth::NoiseDevice::in_decimate(){
-    return in("decimate");
+pdsp::Patchable & np2::synth::NoiseDevice::in_hold(){
+    return in("hold");
 }
 
 pdsp::Patchable & np2::synth::NoiseDevice::ch( size_t index ) {

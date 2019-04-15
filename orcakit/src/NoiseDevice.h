@@ -24,9 +24,8 @@ public:
     float meter() const;
     
     pdsp::Patchable & in_trig();
-    pdsp::Patchable & in_pitch();
-    pdsp::Patchable & in_cutoff();
-    pdsp::Patchable & in_decimate();
+    pdsp::Patchable & in_mod();
+    pdsp::Patchable & in_hold();
 
     pdsp::Patchable & ch( size_t index );
 
@@ -42,6 +41,12 @@ private:
     pdsp::Amp               amp0;
     pdsp::Amp               amp1;
     pdsp::PatchNode         trigger;
+    
+    pdsp::PatchNode         seqMod;
+    pdsp::ParameterAmp      seqToPitch;
+    pdsp::ParameterAmp      seqToCutoff;
+    pdsp::ParameterAmp      seqToDecimate;
+    
     
     pdsp::VAFilter             filter;
     pdsp::Parameter            filterTypeControl;

@@ -1,21 +1,21 @@
 
 #include "ofApp.h"
 
-/* ORCAKIT TODO
-        + k kickzap : trigger / pitch 
-        + n noise : trigger / hold / pitch / degrade / cutoff / send 
-        + r reese sub : trigger / hold / pitch / cutoff
-        + uio 3x crossmod sine perc 
-            + trigger / release / pitch / send
-            + always 100% crossmod 
-        + wavesynth
-            + y 8x voice control
-            + p 8x trigger control
-            + w cutoff / wave control 
-                        ( 35 waves + wave0=empty )
-        + xyz karplus 3 voices : trigger / decay / pitch / send
-        + abcd 4 samplers : trigger / hold / pitch / start / send
-        + e delay time/fb control    
+/* ORCAKIT TODO 
+    MESSAGES
+        + trigger: control dynamics, indipendent amt for mod and amp envs
+        + mod : usually pitch 
+        + hold : hold env time
+    SYNTHS
+        + r reese sub : trigger / mod / hold 
+                + slew amt parameter  
+        + k kickzap : trigger / mod 
+            + k&r ---> saturator 
+        + nm noiseN : trigger / mod / hold 
+            + exclusive 
+        + abcdef samplers with possibility of karplus synthesis 
+            + mix to dimension chorus 
+        + t delay time/fb control    
     + orcakit configfile.xml 
         - loads config file 
 */
@@ -31,20 +31,22 @@ void ofApp::setup(){
     osc.setVerbose( true );
     osc.openPort( 4444 );
 
-    table.setup( 6, "modal table" );
+    noiseN.ch(0) >> limiter.ch(0);
+    noiseN.ch(1) >> limiter.ch(1);
     
-    sub.setup();
-    
-    kick >> limiter.ch(0);
-    kick >> limiter.ch(1);
-    
-    noise.ch(0) >> limiter.ch(0);
-    noise.ch(1) >> limiter.ch(1);
+    noiseN.out("env") >> envInvert >> noiseduck0.in_mod();
+                         envInvert >> noiseduck1.in_mod();
+
+    noiseM.ch(0) >> noiseduck0 >> limiter.ch(0);
+    noiseM.ch(1) >> noiseduck1 >> limiter.ch(1);
 
 
-    kick.out_env() >> sub.invert;
-    sub.gain >> limiter.ch(0);
-    sub.gain >> limiter.ch(1);
+    kick.out_env() >> sub.in("ducking");    
+    kick >> lowEndSaturation;
+    sub >> lowEndSaturation;
+    
+    lowEndSaturation >> limiter.ch(0);
+    lowEndSaturation >> limiter.ch(1);
 
     // ---------- master FX -------------
     
@@ -82,16 +84,22 @@ void ofApp::setup(){
 
     // GUI -----------------------------------
 
-    gui.setup("SETTINGS", "settings.xml", 220, 10);
-        gui.add( sub.parameters );
-        gui.add( kick.parameters );
-        gui.add( noise.parameters );
-        gui.add( limiter.parameters );
-        gui.add( delays.parameters );
-        gui.add( reverbGain.set("reverb gain", -12, -36, 0 ) );
-        gui.add( table.parameters );
-    gui.loadFromFile("settings.xml");
-    gui.minimizeAll();
+    lowendUI.setup("LOW END", "lowend.xml", 20, 20);
+        lowendUI.add( sub.parameters );
+        lowendUI.add( kick.parameters );
+        lowendUI.add( lowEndSaturation.label("low end saturation") );
+    lowendUI.loadFromFile("lowend.xml");
+    
+    noiseUI.setup("NOISE", "noise.xml", 240, 20);
+        noiseUI.add( noiseN.label( "noise n") );
+        noiseUI.add( noiseM.label( "noise m") );
+    noiseUI.loadFromFile("noise.xml");
+    
+    fxUI.setup("FX", "fx.xml", 460, 20);
+        fxUI.add( limiter.parameters );
+        fxUI.add( delays.parameters );
+        fxUI.add( reverbGain.set("reverb gain", -12, -36, 0 ) );
+    fxUI.loadFromFile("fx.xml");
     
     
     // audio setup----------------------------
@@ -109,34 +117,31 @@ void ofApp::setup(){
 //--------------------------------------------------------------
 void ofApp::oscMapping(){
 
-    osc.out_value("/k", 0) >> kick.in("pitch");  
-    osc.out_trig("/k", 1) * (1.0f/8.0f) >> kick.in("trig");  
+    osc.out_value("/k", 1) >> kick.in("pitch");  
+    osc.out_trig("/k", 0) * (1.0f/8.0f) >> kick.in("trig");  
 
-
-    osc.out_value("/n", 0) * 12.0f >> noise.in("pitch");      
+    osc.out_trig("/r", 0) * (1.0f/8.0f) >> sub.in_trig();
+    osc.out_value("/r", 1) >> sub.in_pitch();
+    osc.out_value("/r", 2) >> sub.in("hold");  
+    osc.parser("/r", 2) = [&]( float value ) noexcept { 
+        return value * pdsp::Clockable::getOneBarTimeMs() * (1.0f/16.0f);
+    };
+ 
     // parse 0 as -60 and the rest as pitch 
-    osc.out_value("/n", 1) * (1.0f/8.0f) >> noise.in("trig");  
-    osc.out_value("/n", 2) >> noise.in("hold");  
+    osc.out_trig("/n", 0) * (1.0f/8.0f) >> noiseN.in("trig");  
+    osc.out_value("/n", 1) >> noiseN.in("mod");     
+    osc.out_value("/n", 2) >> noiseN.in("hold");  
     osc.parser("/n", 2) = [&]( float value ) noexcept { 
         return value * pdsp::Clockable::getOneBarTimeMs() * (1.0f/(16.0f*8.0f));
     };
-    osc.out_value("/n", 3) * -3.0f >> noise.in("decimate");  
-    osc.out_value("/n", 4) * -2.0f >> noise.in("filter");  
-
-    osc.out_value("/r", 0) >> sub.node_pitch;
-    osc.parser("/r", 0) = [&]( float value ) noexcept {
-        int i = value;
-        float p = table.pitches[i%table.degrees];
-        int o = i / table.degrees;
-        p += o*12.0f;
-        return p;  
-    };           
-    osc.out_trig("/r", 1) * (1.0f/8.0f) >> sub.node_gate;
-    osc.parser("/r", 1) = [&]( float value ) noexcept {
-        if( value==subgate ){ return pdsp::osc::Ignore;
-        }else{ subgate = value; return value;  }
-    };
     
+    osc.out_trig("/m", 0) * (1.0f/8.0f) >> noiseM.in("trig");  
+    osc.out_value("/m", 1) >> noiseM.in("mod");     
+    osc.out_value("/m", 2) >> noiseM.in("hold");  
+    osc.parser("/m", 2) = [&]( float value ) noexcept { 
+        return value * pdsp::Clockable::getOneBarTimeMs() * (1.0f/(16.0f*8.0f));
+    };
+
 
 
 }
@@ -148,7 +153,9 @@ void ofApp::update(){
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-    gui.draw();
+    lowendUI.draw();
+    noiseUI.draw();
+    fxUI.draw();
 }
 
 //--------------------------------------------------------------
