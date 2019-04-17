@@ -21,7 +21,7 @@
 		<random_cutoff>0</random_cutoff>
 		<seq_to_pitch>0</seq_to_pitch>
 		<seq_to_cutoff>0</seq_to_cutoff>
-		<seq_to_decimate>0</seq_to_decimate>
+		<seq_to_decimate>-3</seq_to_decimate>
 	</noise_n>
 	<noise_m>
 		<gain>-18</gain>

@@ -16,7 +16,7 @@
 		<env_sustain>1</env_sustain>
 		<env_release>900</env_release>
 		<carrier_mix>0.5</carrier_mix>
-		<mod_env_to_fm>0.8</mod_env_to_fm>
+		<mod_env_to_fm>3</mod_env_to_fm>
 		<attack>40</attack>
 		<hold>0</hold>
 		<release>160</release>

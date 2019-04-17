@@ -1,11 +1,11 @@
 <?xml version="1.0"?>
 <FX>
 	<brickwall_limiter>
-		<limiter_threshold>0</limiter_threshold>
+		<limiter_threshold>-9</limiter_threshold>
 		<attack>20</attack>
 		<release>100</release>
 		<knee>1</knee>
-		<makeup_gain>0</makeup_gain>
+		<makeup_gain>9</makeup_gain>
 		<soft_clip_threshold>-2</soft_clip_threshold>
 	</brickwall_limiter>
 	<stereo_delay>

@@ -13,6 +13,7 @@
 #include "dynamics/Brickwall.h"
 #include "ofxDotFrag.h"
 #include "HQSaturator.h"
+#include "ResoSampler.h"
 
 class ofApp : public ofBaseApp{
 
@@ -36,6 +37,8 @@ class ofApp : public ofBaseApp{
 		void gotMessage(ofMessage msg);
         
         void oscMapping();
+                
+        std::function<float(float)> triggerCheck;
         
         pdsp::Engine        engine;   
         pdsp::osc::Input    osc;
@@ -62,6 +65,7 @@ class ofApp : public ofBaseApp{
 
         ofxPanel lowendUI;
         ofxPanel noiseUI;
+        ofxPanel samplersUI;
         ofxPanel fxUI;
         bool bDrawGui;
         
@@ -70,4 +74,6 @@ class ofApp : public ofBaseApp{
         pdsp::LowCut delaycut;
         pdsp::LowCut dtcut;
         
+        
+        np::synth::ResoSampler sampler;
 };

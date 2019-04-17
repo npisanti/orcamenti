@@ -1,31 +1,13 @@
 
 #include "ofApp.h"
 
-/* ORCAKIT TODO 
-    MESSAGES
-        + trigger: control dynamics, indipendent amt for mod and amp envs
-        + mod : usually pitch 
-        + hold : hold env time
-    SYNTHS
-        + r reese sub : trigger / mod / hold 
-                + slew amt parameter  
-        + k kickzap : trigger / mod 
-            + k&r ---> saturator 
-        + nm noiseN : trigger / mod / hold 
-            + exclusive 
-        + abcdef samplers with possibility of karplus synthesis 
-            + mix to dimension chorus 
-        + t delay time/fb control    
-    + orcakit configfile.xml 
-        - loads config file 
-*/
 
 //--------------------------------------------------------------
 void ofApp::setup(){
     
     ofSetWindowTitle("|::|");
-    engine.score.setTempo( 120.0f); // the delay times are clocked
-
+    engine.score.setTempo( 120.0f); 
+    
     bDrawGui = false;
 
     osc.setVerbose( true );
@@ -95,7 +77,11 @@ void ofApp::setup(){
         noiseUI.add( noiseM.label( "noise m") );
     noiseUI.loadFromFile("noise.xml");
     
-    fxUI.setup("FX", "fx.xml", 460, 20);
+    samplersUI.setup("FX", "fx.xml", 460, 20);
+    
+    samplersUI.loadFromFile("samplers.xml");
+    
+    fxUI.setup("FX", "fx.xml", 680, 20);
         fxUI.add( limiter.parameters );
         fxUI.add( delays.parameters );
         fxUI.add( reverbGain.set("reverb gain", -12, -36, 0 ) );
@@ -113,14 +99,25 @@ void ofApp::setup(){
     engine.setup( 44100, 512, 3);     
 }
 
-        
+    
 //--------------------------------------------------------------
 void ofApp::oscMapping(){
+
+    triggerCheck =[&](float value){
+        if( value == 0.0f){
+            return pdsp::osc::Ignore;
+        }else if( value > 8.0f ){
+            return 8.0f;
+        }else{
+            return value;
+        }
+    };
 
     osc.out_value("/k", 1) >> kick.in("pitch");  
     osc.out_trig("/k", 0) * (1.0f/8.0f) >> kick.in("trig");  
 
     osc.out_trig("/r", 0) * (1.0f/8.0f) >> sub.in_trig();
+    osc.parser("/r", 0) = triggerCheck;
     osc.out_value("/r", 1) >> sub.in_pitch();
     osc.out_value("/r", 2) >> sub.in("hold");  
     osc.parser("/r", 2) = [&]( float value ) noexcept { 
@@ -129,6 +126,7 @@ void ofApp::oscMapping(){
  
     // parse 0 as -60 and the rest as pitch 
     osc.out_trig("/n", 0) * (1.0f/8.0f) >> noiseN.in("trig");  
+    osc.parser("/n", 0) = triggerCheck;
     osc.out_value("/n", 1) >> noiseN.in("mod");     
     osc.out_value("/n", 2) >> noiseN.in("hold");  
     osc.parser("/n", 2) = [&]( float value ) noexcept { 
@@ -136,13 +134,12 @@ void ofApp::oscMapping(){
     };
     
     osc.out_trig("/m", 0) * (1.0f/8.0f) >> noiseM.in("trig");  
+    osc.parser("/m", 0) = triggerCheck;
     osc.out_value("/m", 1) >> noiseM.in("mod");     
     osc.out_value("/m", 2) >> noiseM.in("hold");  
     osc.parser("/m", 2) = [&]( float value ) noexcept { 
         return value * pdsp::Clockable::getOneBarTimeMs() * (1.0f/(16.0f*8.0f));
     };
-
-
 
 }
 
@@ -155,6 +152,7 @@ void ofApp::update(){
 void ofApp::draw(){
     lowendUI.draw();
     noiseUI.draw();
+    samplersUI.draw();
     fxUI.draw();
 }
 
