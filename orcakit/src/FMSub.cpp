@@ -82,8 +82,8 @@ void np::synth::FMSub::patch(){
     parameters.add( ratio_ctrl.set( "ratio fine", 0.0f, -1.0f, 0.0f) );
     parameters.add( fm_ctrl.set( "fm", 0.0f, 0.0f, 4.0f) );    
     parameters.add( fm_mod.set( "mod env to fm", 0.0f, 0.0f, 6.66f) );
-    parameters.add( self_ctrl.set("self fb", 0.0f, 0.0f, 1.0f) );
-    parameters.add( self_mod.set("mod env to self", 0.2f, 0.0f, 0.5f) );    
+    parameters.add( self_ctrl.set("self fb", 0.0f, 0.0f, 0.25f) );
+    parameters.add( self_mod.set("mod env to self", 0.0f, 0.0f, 0.25f) );    
     parameters.add( drift.set("drift", 0.0f, 0.0f, 1.0f) );    
     
     parameters.add( envAttackControl.set("attack",  3, 0, 200 ) );

@@ -15,6 +15,12 @@
 #include "HQSaturator.h"
 #include "ResoSampler.h"
 
+#include "synth/DataSynth.h"
+#include "effect/Chorus.h"
+#include "effect/Filter.h"
+#include "ofxDotFrag.h"
+//#include "meter/RMS.h"
+
 class ofApp : public ofBaseApp{
 
 	public:
@@ -45,8 +51,9 @@ class ofApp : public ofBaseApp{
           
         pdsp::ParameterGain fader;
 
+        
         np::synth::FMSub sub;
-        float subgate = 0.0f;
+        pdsp::ParameterGain subSend;
         
         np2::synth::NoiseDevice  noiseN;
         np2::synth::NoiseDevice  noiseM;
@@ -61,11 +68,11 @@ class ofApp : public ofBaseApp{
         
         pdsp::ParameterGain reverbGain;
         pdsp::BasiVerb    reverb;
-        npl::effect::StereoDelay delays;
 
         ofxPanel lowendUI;
         ofxPanel noiseUI;
         ofxPanel samplersUI;
+        ofxPanel fragsUI;
         ofxPanel fxUI;
         bool bDrawGui;
         
@@ -74,6 +81,43 @@ class ofApp : public ofBaseApp{
         pdsp::LowCut delaycut;
         pdsp::LowCut dtcut;
         
+        std::vector<np::synth::ResoSampler> samplers;
+        std::vector<std::string> samplersAddresses;
         
-        np::synth::ResoSampler sampler;
+        int mode;
+        
+        
+        // webcam synth 
+        ofVideoGrabber webcam;
+        int col;
+        ofFbo waveplot;
+        ofFbo camfbo;
+        ofFbo process;
+        ofx::dotfrag::Monochrome monochrome;
+        ofx::dotfrag::HSB hsb;
+        ofx::dotfrag::Twist twist;
+        
+        ofPixels pixels;
+        pdsp::Parameter dtsynthBasePitch;
+
+        np::synth::DataSynth dtsynth;
+        np::effect::Filter filter;
+        np::effect::Chorus chorus;
+        std::vector<float> dtriggers;
+        
+        std::atomic<int> select;
+        std::atomic<float> fragamount;
+        
+        ofParameterGroup graphics;
+        ofParameter<ofColor> bandsColor;
+        ofParameter<ofColor> waveColor;
+        
+        ofParameterGroup calibration;
+        ofParameter<int> offX;
+        ofParameter<int> offY;
+        ofParameter<int> linemin;
+        ofParameter<int> linestep;
+        
+        void drawVideoDrone( int y );
+
 };

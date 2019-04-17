@@ -7,17 +7,49 @@
 void np::synth::ResoSampler::patch(){
    
     addModuleInput("trig", triggers );
-    addModuleInput("pitch", pitchNode );
+    addModuleInput("mod", modNode );
+    addModuleInput("hold", env.in_hold() );
+    addModuleInput("duck_in", invert );
     addModuleOutput("mono", fader );
+    addModuleOutput("send", revSend );
+    addModuleOutput("duck_send", duckNext );
+    addModuleOutput("L", panner.out_L() );
+    addModuleOutput("R", panner.out_R() );
     
     env.enableDBTriggering(-24.0f, 0.0f);
+    
+    sampler >> decimate >> filter >> amp >> comb >> combMix.in_B();
+                                     amp >> combMix.in_A();
+    combMix >> duck >> fader >> panner;
+     invert >> duck.in_mod();
+     env >> duckNext;
+    
+    fader >> revSend;
     
     drift        >> driftAmt;
     driftControl >> driftAmt.in_mod();
                     driftAmt >> sampler.in_pitch();
 
-                    pitchNode >> sampler.in_pitch();
-                 tuningControl >> sampler.in_pitch();
+    lfoPhasor >> lfoSine >> lfoMix.in_A();
+    lfoPhasor >> lfoTri  >> lfoMix.in_B();
+                            lfoMix >> combVibrato >> comb.in_pitch();
+    combVibratoSpeed >> combP2F >> lfoPhasor.in_freq();
+    combVibratoShape >> lfoMix.in_fade();
+    
+    combMixControl >> combMix.in_fade();
+    combTuneControl >> comb.in_pitch();
+    combFBControl >> comb.in_feedback();
+    combDampingControl >> comb.in_damping();
+    fEnv >> combEnvMod >> comb.in_feedback();
+
+            tuningControl >> sampler.in_pitch();
+    modNode >> modToPitch >> sampler.in_pitch();
+    
+    modNode >> modToFilter   >> filter.in_cutoff();
+    modNode >> modToDecimate >> decimP2F;
+    modNode >> modToComb >> comb.in_pitch();
+    
+    panControl >> panner.in_pan();
     
     startControl >> sampler.in_start();
     startModControl >> sampler.in_start_mod();
@@ -26,8 +58,6 @@ void np::synth::ResoSampler::patch(){
     triggers >> sampler >> amp;
     triggers >> env     >> amp.in_mod();
     
-                sampler >> decimate >> filter >> amp >> fader;
-                
     decimP2F        >> decimate.in_freq();
     decimateControl >> decimP2F;
     
@@ -50,33 +80,66 @@ void np::synth::ResoSampler::patch(){
     modHoldControl    >> fEnv.in_hold();
     modReleaseControl >> fEnv.in_release();
 
-    parameters.setName( "quicksampler");
-    parameters.add( fader.set("volume", 0, -48, 24) );
+    parameters.setName( "resosampler");
+    
     parameters.add( loadButton.set( "load", false ));
     parameters.add( sampleName.set("sample", "no sample"));
     parameters.add( samplePath.set("path", "no path"));
     parameters.add( startControl.set("start", 0.0f, 0.0f, 1.0f));
     parameters.add( startModControl.set("dyn start mod", 0.0f, 0.0f, 1.0f));
-    parameters.add( tuningControl.set("pitch", 0, -24, 24));
+    parameters.add( tuningControl.set("pitch coarse", 0, -36, 36));
+    parameters.add( tuningControl.set("pitch fine", 0.0f, -0.5f, 0.5f));
     parameters.add( driftControl.set("pitch drift", 0.0f, 0.0f, 0.5f));
     
-    parameters.add( attackControl.set("amp attack", 0, 0, 600));
-    parameters.add( holdControl.set("amp hold", 0, 0, 600));
-    parameters.add( releaseControl.set("amp release", 0, 0, 600));
-    parameters.add( envDynControl.set("amp dynamics", 1.0f, 0.0f, 1.0f));
-    
-    parameters.add( modAttackControl.set("mod attack", 0, 0, 600));
-    parameters.add( modHoldControl.set("mod hold", 0, 0, 600));
-    parameters.add( modReleaseControl.set("mod release", 0, 0, 600));
-    parameters.add( modEnvDynControl.set("mod dynamics", 0.5f, 0.0f, 1.0f));
-    
-    parameters.add( decimateControl.set( "decimate", 152, 20, 152) );
-    parameters.add( envToDecimate.set("env to decimate", 0, 0, 120));
+    filterGroup.setName( "filtering");
+    filterGroup.add( decimateControl.set( "decimate", 152, 20, 152) );
+    filterGroup.add( envToDecimate.set("env to decimate", 0, 0, 120));
 
-    parameters.add( cutoffControl.set( "filter cutoff", 136, 20, 136) );
-    parameters.add( resoControl.set( "filter reso", 0.0f, 0.0f, 1.0f) );
-    parameters.add( modeControl.set( "filter type", 0, 0, 5) );
-    parameters.add( envToFilter.set("env to filter", 0, 0, 120));
+    filterGroup.add( cutoffControl.set( "filter cutoff", 136, 20, 136) );
+    filterGroup.add( resoControl.set( "filter reso", 0.0f, 0.0f, 1.0f) );
+    filterGroup.add( modeControl.set( "filter type", 0, 0, 5) );
+    filterGroup.add( envToFilter.set("env to filter", 0, 0, 120));
+    parameters.add( filterGroup );
+
+    combGroup.setName( "comb filter");
+    combGroup.add( combMixControl.set("mix", 0.0f, 0.0f, 0.5f ) );
+    combGroup.add( combTuneControl.set("tune", 48, -24, 120 ) );
+    combGroup.add( combTuneControl.set("fine", 0.0f, -0.5f, 0.5f ) );
+    combGroup.add( combFBControl.set("feedback", 0.8f, 0.0f, 1.0f ) );
+    combGroup.add( combDampingControl.set("damping", 0.0f, 0.0f, 1.0f ) );
+    combGroup.add( combVibrato.set("vibrato", 0.0f, 0.0f, 4.0f ) );
+    combGroup.add( combVibratoSpeed.set("vibrato speed", 0, -30, 80 ) );
+    combGroup.add( combVibratoShape.set("vibrato shape", 0.0f, 0.0f, 1.0f ) );
+    combGroup.add( combEnvMod.set("env to feedback", 0.0f, 0.0f, 1.0f ) );
+    parameters.add( combGroup );
+
+    ampEnvGroup.setName( "amp envelope");
+    ampEnvGroup.add( attackControl.set( "attack", 0, 0, 600));
+    ampEnvGroup.add( holdControl.set( "hold", 0, 0, 600));
+    ampEnvGroup.add( releaseControl.set( "release", 0, 0, 600));
+    ampEnvGroup.add( envDynControl.set( "dynamics", 1.0f, 0.0f, 1.0f));
+    parameters.add( ampEnvGroup );
+    
+    modEnvGroup.setName( "mod envelope");
+    modEnvGroup.add( modAttackControl.set( "attack", 0, 0, 600));
+    modEnvGroup.add( modHoldControl.set( "hold", 0, 0, 600));
+    modEnvGroup.add( modReleaseControl.set( "release", 0, 0, 600));
+    modEnvGroup.add( modEnvDynControl.set( "dynamics", 0.5f, 0.0f, 1.0f));
+    parameters.add( modEnvGroup );
+    
+    extModGroup.setName( "mod input" );
+    extModGroup.add( modToPitch.set("to pitch", 1.0f, -12.0f, 12.0));
+    extModGroup.add( modToFilter.set("to filter", 0.0f, -12.0f, 12.0f));
+    extModGroup.add( modToDecimate.set("to decimate", 0.0f, -12.0f, 12.0f));
+    extModGroup.add( modToComb.set("to comb", 0.0f, -12.0f, 12.0f));
+    parameters.add( extModGroup );
+    
+    mixer.setName("mixer channel");
+    mixer.add( fader.set("volume", -12, -48, 24) );
+    mixer.add( panControl.set("pan", 0.0f, -1.0f, 1.0f) );
+    mixer.add( revSend.set("reverb send", -48, -48, 12) );
+    mixer.add( duckNext.set("duck next", false) );
+    parameters.add( mixer );
     
     loadButton.addListener(this, &ResoSampler::loadButtonCall );
     samplePath.addListener(this, &ResoSampler::sampleChangedCall );
@@ -123,8 +186,8 @@ void np::synth::ResoSampler::sampleChangedCall( std::string & value ) {
     loadSample( samplePath );    
 
     auto v = ofSplitString(samplePath, "/" );
-    sampleName = v[v.size()-1];
-    
+    sampleName = v[v.size()-1];        
+
 }
     
 void np::synth::ResoSampler::loadSample( std::string path ) {
@@ -156,6 +219,6 @@ void np::synth::ResoSampler::dBTriggering( bool enable ) {
 pdsp::Patchable & np::synth::ResoSampler::in_trig() {
     return in("trig");
 }
-pdsp::Patchable & np::synth::ResoSampler::in_pitch() {
-    return in("pitch");
+pdsp::Patchable & np::synth::ResoSampler::in_mod() {
+    return in("mod");
 }

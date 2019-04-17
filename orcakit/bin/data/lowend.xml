@@ -4,7 +4,7 @@
 		<gain>0</gain>
 		<osc2>0</osc2>
 		<detune>0.3</detune>
-		<ratio_coarse>2</ratio_coarse>
+		<ratio_coarse>1</ratio_coarse>
 		<ratio_fine>0</ratio_fine>
 		<fm>0</fm>
 		<fm_mod>0</fm_mod>
@@ -16,7 +16,7 @@
 		<env_sustain>1</env_sustain>
 		<env_release>900</env_release>
 		<carrier_mix>0.5</carrier_mix>
-		<mod_env_to_fm>3</mod_env_to_fm>
+		<mod_env_to_fm>2</mod_env_to_fm>
 		<attack>40</attack>
 		<hold>0</hold>
 		<release>160</release>
@@ -48,4 +48,5 @@
 		<input_dB>6</input_dB>
 		<output_dB>-12</output_dB>
 	</low_end_saturation>
+	<sub_send>-32</sub_send>
 </LOW_END>
