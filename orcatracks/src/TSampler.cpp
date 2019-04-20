@@ -1,10 +1,10 @@
 
-// ResoSampler.cpp
+// TSampler.cpp
 // Nicola Pisanti, MIT License, 2018
 
-#include "ResoSampler.h"
+#include "TSampler.h"
 
-void np::synth::ResoSampler::patch(){
+void np::synth::TSampler::patch(){
    
     addModuleInput("trig", triggers );
     addModuleInput("mod", modNode );
@@ -51,7 +51,6 @@ void np::synth::ResoSampler::patch(){
     modNode >> modToFilter   >> filter.in_cutoff();
     modNode >> modToDecimate >> decimP2F;
     modNode >> modToComb >> comb.in_pitch();
-    modNode >> modToStart >> sampler.in_start_mod();
     
     panControl >> panner.in_pan();
     
@@ -144,7 +143,6 @@ void np::synth::ResoSampler::patch(){
     extModGroup.add( modToPitch.set("to pitch", 1.0f, -12.0f, 12.0));
     extModGroup.add( modToFilter.set("to filter", 0.0f, -12.0f, 12.0f));
     extModGroup.add( modToDecimate.set("to decimate", 0.0f, -12.0f, 12.0f));
-    extModGroup.add( modToStart.set("to start", 0.0f, 0.0f, 1.0f/8.0f) );
     extModGroup.add( modToComb.set("to comb", 0.0f, -12.0f, 12.0f));
     parameters.add( extModGroup );
     
@@ -156,17 +154,17 @@ void np::synth::ResoSampler::patch(){
     mixer.add( duckNext.set("duck next", false) );
     parameters.add( mixer );
     
-    loadButton.addListener(this, &ResoSampler::loadButtonCall );
-    samplePath.addListener(this, &ResoSampler::sampleChangedCall );
+    loadButton.addListener(this, &TSampler::loadButtonCall );
+    samplePath.addListener(this, &TSampler::sampleChangedCall );
     
 }
 
-ofParameterGroup & np::synth::ResoSampler::label( std::string name ){
+ofParameterGroup & np::synth::TSampler::label( std::string name ){
     parameters.setName( name );
     return parameters;
 }
 
-void np::synth::ResoSampler::loadButtonCall( bool & value ) {
+void np::synth::TSampler::loadButtonCall( bool & value ) {
     if(value){
 
         int fvalue = fader.getOFParameterInt().get();
@@ -195,7 +193,7 @@ void np::synth::ResoSampler::loadButtonCall( bool & value ) {
     }
 }
 
-void np::synth::ResoSampler::sampleChangedCall( std::string & value ) {
+void np::synth::TSampler::sampleChangedCall( std::string & value ) {
     
     ofLogVerbose( "loading" + value );
     loadSample( samplePath );    
@@ -205,7 +203,7 @@ void np::synth::ResoSampler::sampleChangedCall( std::string & value ) {
 
 }
     
-void np::synth::ResoSampler::loadSample( std::string path ) {
+void np::synth::TSampler::loadSample( std::string path ) {
     
     sample.load( path );
     
@@ -219,11 +217,11 @@ void np::synth::ResoSampler::loadSample( std::string path ) {
     
 }
 
-void np::synth::ResoSampler::load( std::string path ) {
+void np::synth::TSampler::load( std::string path ) {
     samplePath = path;
 }
 
-void np::synth::ResoSampler::dBTriggering( bool enable ) {
+void np::synth::TSampler::dBTriggering( bool enable ) {
     if(enable){
         env.enableDBTriggering(-24.0f, 0.0f);
     }else{
@@ -231,9 +229,9 @@ void np::synth::ResoSampler::dBTriggering( bool enable ) {
     }
 }
 
-pdsp::Patchable & np::synth::ResoSampler::in_trig() {
+pdsp::Patchable & np::synth::TSampler::in_trig() {
     return in("trig");
 }
-pdsp::Patchable & np::synth::ResoSampler::in_mod() {
+pdsp::Patchable & np::synth::TSampler::in_mod() {
     return in("mod");
 }

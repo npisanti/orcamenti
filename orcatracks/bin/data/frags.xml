@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<FRAGS>
+	<datasynth>
+		<gain>-18</gain>
+		<wave_smoothing>0.4</wave_smoothing>
+		<filter_cutoff>136</filter_cutoff>
+		<env_attack>50</env_attack>
+		<env_decay>400</env_decay>
+		<env_sustain>1</env_sustain>
+		<env_release>900</env_release>
+		<drift>0.05</drift>
+	</datasynth>
+	<base_pitch>36</base_pitch>
+	<calibration>
+		<off_x>0</off_x>
+		<off_y>0</off_y>
+		<line_min>40</line_min>
+		<line_step>5</line_step>
+	</calibration>
+	<monochrome>
+		<active>1</active>
+		<low>0.260204</low>
+		<high>0.821429</high>
+	</monochrome>
+	<HSB>
+		<active>1</active>
+		<hue>0</hue>
+		<brightness>0</brightness>
+		<saturation>1</saturation>
+		<contrast>1</contrast>
+	</HSB>
+	<twist>
+		<active>1</active>
+		<amount>0.5</amount>
+		<variation>0.5</variation>
+	</twist>
+	<graphis>
+		<wave_color>255, 37, 61, 255</wave_color>
+		<bands_color>255, 255, 255, 255</bands_color>
+	</graphis>
+	<chorus>
+		<cho_speed__hz_>0.25</cho_speed__hz_>
+		<cho_depth__ms_>3.5</cho_depth__ms_>
+	</chorus>
+</FRAGS>

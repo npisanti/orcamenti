@@ -108,14 +108,14 @@
 	<sampler_a>
 		<sample>
 			<load>0</load>
-			<sample>tibetan_01.wav</sample>
-			<path>/home/nicola/resources/np-samples/tibetan_bells/tibetan_01.wav</path>
+			<sample>clave_01.wav</sample>
+			<path>/home/nicola/resources/np-samples/claves/clave_01.wav</path>
 			<start>0</start>
 		</sample>
 		<tuning>
-			<pitch_coarse>0</pitch_coarse>
+			<pitch_coarse>-24</pitch_coarse>
 			<pitch_fine>0</pitch_fine>
-			<pitch_drift>0</pitch_drift>
+			<pitch_drift>0.05</pitch_drift>
 		</tuning>
 		<filtering>
 			<decimate>152</decimate>
@@ -138,33 +138,28 @@
 		</resonator>
 		<volume_envelope>
 			<attack>0</attack>
-			<hold>0</hold>
-			<release>0</release>
-			<dynamics>1</dynamics>
-			<dyn_sample_mod>0</dyn_sample_mod>
-			<hold_time>7221</hold_time>
+			<hold_time>47</hold_time>
 			<release_time>50</release_time>
+			<dynamics>0.387755</dynamics>
+			<dyn_sample_mod>0.05</dyn_sample_mod>
 		</volume_envelope>
 		<mod_envelope>
 			<attack>0</attack>
-			<hold>0</hold>
-			<release>0</release>
-			<dynamics>0.5</dynamics>
-			<hold_time>7221</hold_time>
+			<hold_time>134</hold_time>
 			<release_time>50</release_time>
+			<dynamics>0.5</dynamics>
 		</mod_envelope>
 		<mod_input>
 			<use_tuning>1</use_tuning>
 			<to_pitch>1</to_pitch>
 			<to_filter>0</to_filter>
 			<to_decimate>0</to_decimate>
-			<to_start>0</to_start>
 			<to_comb>0</to_comb>
 		</mod_input>
 		<mixer_channel>
-			<volume>-12</volume>
-			<pan>0</pan>
-			<reverb_send>-48</reverb_send>
+			<volume>-6</volume>
+			<pan>-0.7</pan>
+			<reverb_send>-12</reverb_send>
 			<delay_send>-48</delay_send>
 			<duck_next>0</duck_next>
 		</mixer_channel>
@@ -172,14 +167,14 @@
 	<sampler_b>
 		<sample>
 			<load>0</load>
-			<sample>no path</sample>
-			<path>no path</path>
+			<sample>clave_01.wav</sample>
+			<path>/home/nicola/resources/np-samples/claves/clave_01.wav</path>
 			<start>0</start>
 		</sample>
 		<tuning>
-			<pitch_coarse>0</pitch_coarse>
+			<pitch_coarse>-24</pitch_coarse>
 			<pitch_fine>0</pitch_fine>
-			<pitch_drift>0</pitch_drift>
+			<pitch_drift>0.05</pitch_drift>
 		</tuning>
 		<filtering>
 			<decimate>152</decimate>
@@ -202,33 +197,28 @@
 		</resonator>
 		<volume_envelope>
 			<attack>0</attack>
-			<hold>0</hold>
-			<release>0</release>
-			<dynamics>1</dynamics>
-			<dyn_sample_mod>0</dyn_sample_mod>
-			<hold_time>0</hold_time>
+			<hold_time>47</hold_time>
 			<release_time>50</release_time>
+			<dynamics>0.387755</dynamics>
+			<dyn_sample_mod>0.05</dyn_sample_mod>
 		</volume_envelope>
 		<mod_envelope>
 			<attack>0</attack>
-			<hold>0</hold>
-			<release>0</release>
-			<dynamics>0.5</dynamics>
-			<hold_time>0</hold_time>
+			<hold_time>134</hold_time>
 			<release_time>50</release_time>
+			<dynamics>0.5</dynamics>
 		</mod_envelope>
 		<mod_input>
 			<use_tuning>1</use_tuning>
 			<to_pitch>1</to_pitch>
 			<to_filter>0</to_filter>
 			<to_decimate>0</to_decimate>
-			<to_start>0</to_start>
 			<to_comb>0</to_comb>
 		</mod_input>
 		<mixer_channel>
-			<volume>-12</volume>
-			<pan>0</pan>
-			<reverb_send>-48</reverb_send>
+			<volume>-6</volume>
+			<pan>0.7</pan>
+			<reverb_send>-12</reverb_send>
 			<delay_send>-48</delay_send>
 			<duck_next>0</duck_next>
 		</mixer_channel>
@@ -236,12 +226,12 @@
 	<sampler_c>
 		<sample>
 			<load>0</load>
-			<sample>no path</sample>
-			<path>no path</path>
+			<sample>C3-3.wav</sample>
+			<path>/home/nicola/resources/samples/sb_mellotrons/MK2_Violins/C3-3.wav</path>
 			<start>0</start>
 		</sample>
 		<tuning>
-			<pitch_coarse>0</pitch_coarse>
+			<pitch_coarse>-12</pitch_coarse>
 			<pitch_fine>0</pitch_fine>
 			<pitch_drift>0</pitch_drift>
 		</tuning>
@@ -265,7 +255,7 @@
 			<env_to_feedback>0</env_to_feedback>
 		</resonator>
 		<volume_envelope>
-			<attack>0</attack>
+			<attack>50</attack>
 			<hold>0</hold>
 			<release>0</release>
 			<dynamics>1</dynamics>
@@ -278,7 +268,7 @@
 			<hold>0</hold>
 			<release>0</release>
 			<dynamics>0.5</dynamics>
-			<hold_time>0</hold_time>
+			<hold_time>7533</hold_time>
 			<release_time>50</release_time>
 		</mod_envelope>
 		<mod_input>
@@ -286,26 +276,25 @@
 			<to_pitch>1</to_pitch>
 			<to_filter>0</to_filter>
 			<to_decimate>0</to_decimate>
-			<to_start>0</to_start>
 			<to_comb>0</to_comb>
 		</mod_input>
 		<mixer_channel>
 			<volume>-12</volume>
 			<pan>0</pan>
-			<reverb_send>-48</reverb_send>
-			<delay_send>-48</delay_send>
+			<reverb_send>-12</reverb_send>
+			<delay_send>-20</delay_send>
 			<duck_next>0</duck_next>
 		</mixer_channel>
 	</sampler_c>
 	<sampler_d>
 		<sample>
 			<load>0</load>
-			<sample>no path</sample>
-			<path>no path</path>
+			<sample>C3-3.wav</sample>
+			<path>/home/nicola/resources/samples/sb_mellotrons/MK2_Violins/C3-3.wav</path>
 			<start>0</start>
 		</sample>
 		<tuning>
-			<pitch_coarse>0</pitch_coarse>
+			<pitch_coarse>-12</pitch_coarse>
 			<pitch_fine>0</pitch_fine>
 			<pitch_drift>0</pitch_drift>
 		</tuning>
@@ -329,7 +318,7 @@
 			<env_to_feedback>0</env_to_feedback>
 		</resonator>
 		<volume_envelope>
-			<attack>0</attack>
+			<attack>50</attack>
 			<hold>0</hold>
 			<release>0</release>
 			<dynamics>1</dynamics>
@@ -342,7 +331,7 @@
 			<hold>0</hold>
 			<release>0</release>
 			<dynamics>0.5</dynamics>
-			<hold_time>0</hold_time>
+			<hold_time>7533</hold_time>
 			<release_time>50</release_time>
 		</mod_envelope>
 		<mod_input>
@@ -350,7 +339,6 @@
 			<to_pitch>1</to_pitch>
 			<to_filter>0</to_filter>
 			<to_decimate>0</to_decimate>
-			<to_start>0</to_start>
 			<to_comb>0</to_comb>
 		</mod_input>
 		<mixer_channel>
@@ -361,115 +349,10 @@
 			<duck_next>0</duck_next>
 		</mixer_channel>
 	</sampler_d>
-	<fm_sub>
-		<gain>0</gain>
-		<base_pitch>29</base_pitch>
-		<A_pitch_scale>1</A_pitch_scale>
-		<B_pitch_scale>1</B_pitch_scale>
-		<mod_pitch_scale>1</mod_pitch_scale>
-		<carrier_mix>0.5</carrier_mix>
-		<detune>0.3</detune>
-		<ratio_coarse>1</ratio_coarse>
-		<ratio_fine>0</ratio_fine>
-		<fm>0</fm>
-		<mod_env_to_fm>2</mod_env_to_fm>
-		<self_fb>0.1</self_fb>
-		<mod_env_to_self>0</mod_env_to_self>
-		<drift>0</drift>
-		<attack>40</attack>
-		<hold>0</hold>
-		<release>160</release>
-		<dynamics>1</dynamics>
-		<mod_attack>10</mod_attack>
-		<mod_hold>0</mod_hold>
-		<mod_release>70</mod_release>
-		<mod_dynamics>0</mod_dynamics>
-	</fm_sub>
-	<sine_percussion>
-		<gain>0</gain>
-		<pitch>36</pitch>
-		<pitch_env>48</pitch_env>
-		<p_env_attack>0</p_env_attack>
-		<p_env_release>60</p_env_release>
-		<p_env_dyn_amt>0</p_env_dyn_amt>
-		<feedback>0</feedback>
-		<env_to_fb>0</env_to_fb>
-		<attack>3</attack>
-		<hold>10</hold>
-		<release>150</release>
-	</sine_percussion>
-	<low_end_saturation>
-		<input_dB>6</input_dB>
-		<output_dB>-12</output_dB>
-	</low_end_saturation>
-	<sub_send>-32</sub_send>
-	<noise_n>
-		<gain>-18</gain>
-		<pitch>-36</pitch>
-		<decimate>160</decimate>
-		<bits>24</bits>
-		<attack>0</attack>
-		<hold>0</hold>
-		<release>5</release>
-		<filter_mode>0</filter_mode>
-		<filter_cutoff>136</filter_cutoff>
-		<filter_reso>0</filter_reso>
-		<mod_attack>0</mod_attack>
-		<mod_release>50</mod_release>
-		<mod_velo>0.5</mod_velo>
-		<mEnv_to_pitch>0</mEnv_to_pitch>
-		<mEnv_to_decimation>0</mEnv_to_decimation>
-		<mEnv_to_filter>0</mEnv_to_filter>
-		<random>0</random>
-		<random_cutoff>0</random_cutoff>
-		<seq_to_pitch>0</seq_to_pitch>
-		<seq_to_cutoff>0</seq_to_cutoff>
-		<seq_to_decimate>-3</seq_to_decimate>
-	</noise_n>
-	<noise_m>
-		<gain>-18</gain>
-		<pitch>-19</pitch>
-		<decimate>126</decimate>
-		<bits>24</bits>
-		<attack>3</attack>
-		<hold>0</hold>
-		<release>300</release>
-		<filter_mode>0</filter_mode>
-		<filter_cutoff>110</filter_cutoff>
-		<filter_reso>0</filter_reso>
-		<mod_attack>0</mod_attack>
-		<mod_release>360</mod_release>
-		<mod_velo>0.5</mod_velo>
-		<mEnv_to_pitch>0</mEnv_to_pitch>
-		<mEnv_to_decimation>0</mEnv_to_decimation>
-		<mEnv_to_filter>56</mEnv_to_filter>
-		<random>20</random>
-		<random_cutoff>0</random_cutoff>
-		<seq_to_pitch>0</seq_to_pitch>
-		<seq_to_cutoff>0</seq_to_cutoff>
-		<seq_to_decimate>0</seq_to_decimate>
-	</noise_m>
-	<reverb>
-		<reverb_gain>-9</reverb_gain>
-		<rt60>3.33</rt60>
-		<density>0.5</density>
-		<damping>0.5</damping>
-		<high_cut_freq>5000</high_cut_freq>
-		<mod_speed__hz_>0.2</mod_speed__hz_>
-		<mod_depth__ms_>0.8</mod_depth__ms_>
-	</reverb>
-	<brickwall_limiter>
-		<limiter_threshold>-9</limiter_threshold>
-		<attack>20</attack>
-		<release>100</release>
-		<knee>1</knee>
-		<makeup_gain>9</makeup_gain>
-		<soft_clip_threshold>-2</soft_clip_threshold>
-	</brickwall_limiter>
 	<sampler_e>
 		<sample>
 			<load>0</load>
-			<sample>no sample</sample>
+			<sample>no path</sample>
 			<path>no path</path>
 			<start>0</start>
 		</sample>
@@ -503,19 +386,22 @@
 			<release>0</release>
 			<dynamics>1</dynamics>
 			<dyn_sample_mod>0</dyn_sample_mod>
+			<hold_time>0</hold_time>
+			<release_time>50</release_time>
 		</volume_envelope>
 		<mod_envelope>
 			<attack>0</attack>
 			<hold>0</hold>
 			<release>0</release>
 			<dynamics>0.5</dynamics>
+			<hold_time>0</hold_time>
+			<release_time>50</release_time>
 		</mod_envelope>
 		<mod_input>
 			<use_tuning>1</use_tuning>
 			<to_pitch>1</to_pitch>
 			<to_filter>0</to_filter>
 			<to_decimate>0</to_decimate>
-			<to_start>0</to_start>
 			<to_comb>0</to_comb>
 		</mod_input>
 		<mixer_channel>
@@ -526,4 +412,260 @@
 			<duck_next>0</duck_next>
 		</mixer_channel>
 	</sampler_e>
+	<sampler_f>
+		<sample>
+			<load>0</load>
+			<sample>no path</sample>
+			<path>no path</path>
+			<start>0</start>
+		</sample>
+		<tuning>
+			<pitch_coarse>0</pitch_coarse>
+			<pitch_fine>0</pitch_fine>
+			<pitch_drift>0</pitch_drift>
+		</tuning>
+		<filtering>
+			<decimate>152</decimate>
+			<env_to_decimate>0</env_to_decimate>
+			<filter_cutoff>136</filter_cutoff>
+			<filter_reso>0</filter_reso>
+			<filter_type>0</filter_type>
+			<env_to_filter>0</env_to_filter>
+		</filtering>
+		<resonator>
+			<mix>0</mix>
+			<tune>48</tune>
+			<fine>0</fine>
+			<feedback>0.8</feedback>
+			<damping>0</damping>
+			<vibrato>0</vibrato>
+			<vibrato_speed>0</vibrato_speed>
+			<vibrato_shape>0</vibrato_shape>
+			<env_to_feedback>0</env_to_feedback>
+		</resonator>
+		<volume_envelope>
+			<attack>0</attack>
+			<hold>0</hold>
+			<release>0</release>
+			<dynamics>1</dynamics>
+			<dyn_sample_mod>0</dyn_sample_mod>
+			<hold_time>0</hold_time>
+			<release_time>50</release_time>
+		</volume_envelope>
+		<mod_envelope>
+			<attack>0</attack>
+			<hold>0</hold>
+			<release>0</release>
+			<dynamics>0.5</dynamics>
+			<hold_time>0</hold_time>
+			<release_time>50</release_time>
+		</mod_envelope>
+		<mod_input>
+			<use_tuning>1</use_tuning>
+			<to_pitch>1</to_pitch>
+			<to_filter>0</to_filter>
+			<to_decimate>0</to_decimate>
+			<to_comb>0</to_comb>
+		</mod_input>
+		<mixer_channel>
+			<volume>-12</volume>
+			<pan>0</pan>
+			<reverb_send>-48</reverb_send>
+			<delay_send>-48</delay_send>
+			<duck_next>0</duck_next>
+		</mixer_channel>
+	</sampler_f>
+	<sampler_g>
+		<sample>
+			<load>0</load>
+			<sample>no path</sample>
+			<path>no path</path>
+			<start>0</start>
+		</sample>
+		<tuning>
+			<pitch_coarse>0</pitch_coarse>
+			<pitch_fine>0</pitch_fine>
+			<pitch_drift>0</pitch_drift>
+		</tuning>
+		<filtering>
+			<decimate>152</decimate>
+			<env_to_decimate>0</env_to_decimate>
+			<filter_cutoff>136</filter_cutoff>
+			<filter_reso>0</filter_reso>
+			<filter_type>0</filter_type>
+			<env_to_filter>0</env_to_filter>
+		</filtering>
+		<resonator>
+			<mix>0</mix>
+			<tune>48</tune>
+			<fine>0</fine>
+			<feedback>0.8</feedback>
+			<damping>0</damping>
+			<vibrato>0</vibrato>
+			<vibrato_speed>0</vibrato_speed>
+			<vibrato_shape>0</vibrato_shape>
+			<env_to_feedback>0</env_to_feedback>
+		</resonator>
+		<volume_envelope>
+			<attack>0</attack>
+			<hold>0</hold>
+			<release>0</release>
+			<dynamics>1</dynamics>
+			<dyn_sample_mod>0</dyn_sample_mod>
+			<hold_time>0</hold_time>
+			<release_time>50</release_time>
+		</volume_envelope>
+		<mod_envelope>
+			<attack>0</attack>
+			<hold>0</hold>
+			<release>0</release>
+			<dynamics>0.5</dynamics>
+			<hold_time>0</hold_time>
+			<release_time>50</release_time>
+		</mod_envelope>
+		<mod_input>
+			<use_tuning>1</use_tuning>
+			<to_pitch>1</to_pitch>
+			<to_filter>0</to_filter>
+			<to_decimate>0</to_decimate>
+			<to_comb>0</to_comb>
+		</mod_input>
+		<mixer_channel>
+			<volume>-12</volume>
+			<pan>0</pan>
+			<reverb_send>-48</reverb_send>
+			<delay_send>-48</delay_send>
+			<duck_next>0</duck_next>
+		</mixer_channel>
+	</sampler_g>
+	<sampler_h>
+		<sample>
+			<load>0</load>
+			<sample>no path</sample>
+			<path>no path</path>
+			<start>0</start>
+		</sample>
+		<tuning>
+			<pitch_coarse>0</pitch_coarse>
+			<pitch_fine>0</pitch_fine>
+			<pitch_drift>0</pitch_drift>
+		</tuning>
+		<filtering>
+			<decimate>152</decimate>
+			<env_to_decimate>0</env_to_decimate>
+			<filter_cutoff>136</filter_cutoff>
+			<filter_reso>0</filter_reso>
+			<filter_type>0</filter_type>
+			<env_to_filter>0</env_to_filter>
+		</filtering>
+		<resonator>
+			<mix>0</mix>
+			<tune>48</tune>
+			<fine>0</fine>
+			<feedback>0.8</feedback>
+			<damping>0</damping>
+			<vibrato>0</vibrato>
+			<vibrato_speed>0</vibrato_speed>
+			<vibrato_shape>0</vibrato_shape>
+			<env_to_feedback>0</env_to_feedback>
+		</resonator>
+		<volume_envelope>
+			<attack>0</attack>
+			<hold>0</hold>
+			<release>0</release>
+			<dynamics>1</dynamics>
+			<dyn_sample_mod>0</dyn_sample_mod>
+			<hold_time>0</hold_time>
+			<release_time>50</release_time>
+		</volume_envelope>
+		<mod_envelope>
+			<attack>0</attack>
+			<hold>0</hold>
+			<release>0</release>
+			<dynamics>0.5</dynamics>
+			<hold_time>0</hold_time>
+			<release_time>50</release_time>
+		</mod_envelope>
+		<mod_input>
+			<use_tuning>1</use_tuning>
+			<to_pitch>1</to_pitch>
+			<to_filter>0</to_filter>
+			<to_decimate>0</to_decimate>
+			<to_comb>0</to_comb>
+		</mod_input>
+		<mixer_channel>
+			<volume>-12</volume>
+			<pan>0</pan>
+			<reverb_send>-48</reverb_send>
+			<delay_send>-48</delay_send>
+			<duck_next>0</duck_next>
+		</mixer_channel>
+	</sampler_h>
+	<integer_ratio_mode>
+		<master_pitch>0</master_pitch>
+		<d0_enable>1</d0_enable>
+		<d0_numerator>12</d0_numerator>
+		<d0_denominator>12</d0_denominator>
+		<d1_enable>0</d1_enable>
+		<d1_numerator>13</d1_numerator>
+		<d1_denominator>12</d1_denominator>
+		<d2_enable>1</d2_enable>
+		<d2_numerator>14</d2_numerator>
+		<d2_denominator>12</d2_denominator>
+		<d3_enable>1</d3_enable>
+		<d3_numerator>15</d3_numerator>
+		<d3_denominator>12</d3_denominator>
+		<d4_enable>0</d4_enable>
+		<d4_numerator>16</d4_numerator>
+		<d4_denominator>12</d4_denominator>
+		<d5_enable>1</d5_enable>
+		<d5_numerator>17</d5_numerator>
+		<d5_denominator>12</d5_denominator>
+		<d6_enable>0</d6_enable>
+		<d6_numerator>18</d6_numerator>
+		<d6_denominator>12</d6_denominator>
+		<d7_enable>1</d7_enable>
+		<d7_numerator>19</d7_numerator>
+		<d7_denominator>12</d7_denominator>
+		<d8_enable>1</d8_enable>
+		<d8_numerator>20</d8_numerator>
+		<d8_denominator>12</d8_denominator>
+		<d9_enable>0</d9_enable>
+		<d9_numerator>21</d9_numerator>
+		<d9_denominator>12</d9_denominator>
+		<d10_enable>1</d10_enable>
+		<d10_numerator>22</d10_numerator>
+		<d10_denominator>12</d10_denominator>
+		<d11_enable>0</d11_enable>
+		<d11_numerator>23</d11_numerator>
+		<d11_denominator>12</d11_denominator>
+	</integer_ratio_mode>
+	<stereo_delay>
+		<input_gain>0</input_gain>
+		<L_16th_time>8</L_16th_time>
+		<L_feedback>0.4</L_feedback>
+		<R_16th_time>6</R_16th_time>
+		<R_feedback>0.4</R_feedback>
+		<damping>0.5</damping>
+		<mod_speed__hz_>0.25</mod_speed__hz_>
+		<mod_depth__ms_>0</mod_depth__ms_>
+		<output_gain>0</output_gain>
+	</stereo_delay>
+	<reverb>
+		<reverb_gain>-9</reverb_gain>
+		<rt60>3.33</rt60>
+		<density>0.5</density>
+		<damping>0.5</damping>
+		<high_cut_freq>5000</high_cut_freq>
+		<mod_speed__hz_>0.2</mod_speed__hz_>
+		<mod_depth__ms_>0.8</mod_depth__ms_>
+	</reverb>
+	<brickwall_limiter>
+		<limiter_threshold>0</limiter_threshold>
+		<attack>20</attack>
+		<release>100</release>
+		<knee>1</knee>
+		<makeup_gain>0</makeup_gain>
+		<soft_clip_threshold>-2</soft_clip_threshold>
+	</brickwall_limiter>
 </settings>

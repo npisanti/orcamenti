@@ -6,10 +6,10 @@
 
 namespace np { namespace synth {
     
-class ResoSampler : public pdsp::Patchable {
+class TSampler : public pdsp::Patchable {
 public:
-    ResoSampler() { patch(); } 
-    ResoSampler( const ResoSampler & other ){ patch(); } 
+    TSampler() { patch(); } 
+    TSampler( const TSampler & other ){ patch(); } 
     
     ofParameterGroup    parameters;
     
@@ -118,7 +118,6 @@ private:
     pdsp::ParameterAmp modToFilter;
     pdsp::ParameterAmp modToDecimate;
     pdsp::ParameterAmp modToComb;
-    pdsp::ParameterAmp modToStart;
     
     pdsp::ParameterAmp  duckNext;
     pdsp::Amp           duck;

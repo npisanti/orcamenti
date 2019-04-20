@@ -6,3 +6,4 @@ ofxOsc
 ofxAudioFile
 np-patches
 ofxWatchFile
+ofxDotFrag

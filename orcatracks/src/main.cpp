@@ -24,6 +24,6 @@ int main( ){
     ofRunMainLoop();
 */
 
-	ofSetupOpenGL( 20 + 220*8, 920, OF_WINDOW );
+	ofSetupOpenGL( 20 + 220*8, 820, OF_WINDOW );
 	ofRunApp(new ofApp());
 }
