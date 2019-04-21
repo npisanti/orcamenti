@@ -1,14 +1,8 @@
 
 #include "ofApp.h"
 
-#define FRAGW 320
-#define CAMW 240
-#define CAMH 240
-
 //--------------------------------------------------------------
 void ofApp::setup(){
-        
-    config = "settings.xml";
     
     ofSetWindowTitle("|::|");
     engine.score.setTempo( 120.0f); 
