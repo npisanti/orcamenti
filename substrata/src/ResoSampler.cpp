@@ -151,7 +151,7 @@ void np::synth::ResoSampler::patch(){
     mixer.setName("mixer channel");
     mixer.add( fader.set("volume", -12, -48, 24) );
     mixer.add( panControl.set("pan", 0.0f, -1.0f, 1.0f) );
-    mixer.add( revSend.set("reverb send", -48, -48, 12) );
+    mixer.add( revSend.set("reverb send", -24, -48, 12) );
     mixer.add( delSend.set("delay send", -48, -48, 12) );
     mixer.add( duckNext.set("duck next", false) );
     parameters.add( mixer );

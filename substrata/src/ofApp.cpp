@@ -102,9 +102,10 @@ void ofApp::setup(){
         samplersUI[i].add( samplers[i].combGroup );
         samplersUI[i].add( samplers[i].modEnvGroup );
         samplersUI[i].add( samplers[i].extModGroup );
+        samplersUI[i].minimizeAll();
+
         samplersUI[i].add( samplers[i].mixer );
         //samplersUI[i].loadFromFile( file );
-        samplersUI[i].minimizeAll();
         
         global.add( samplers[i].label(label) );
     }    
