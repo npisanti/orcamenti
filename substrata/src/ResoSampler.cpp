@@ -180,6 +180,8 @@ void np::synth::ResoSampler::loadButtonCall( bool & value ) {
             
             std::string path = openFileResult.getPath();
             
+            std::cout<<"ext is "<< ofFilePath::getFileExt( path ) <<"\n";
+            
             samplePath = path;
         
             ofLogVerbose("file loaded");
