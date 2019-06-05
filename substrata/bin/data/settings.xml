@@ -362,7 +362,7 @@
 		</mixer_channel>
 	</sampler_d>
 	<fm_sub>
-		<gain>0</gain>
+		<gain>-6</gain>
 		<base_pitch>29</base_pitch>
 		<A_pitch_scale>1</A_pitch_scale>
 		<B_pitch_scale>1</B_pitch_scale>
@@ -372,17 +372,17 @@
 		<ratio_coarse>1</ratio_coarse>
 		<ratio_fine>0</ratio_fine>
 		<fm>0</fm>
-		<mod_env_to_fm>2</mod_env_to_fm>
-		<self_fb>0.1</self_fb>
+		<mod_env_to_fm>1.3</mod_env_to_fm>
+		<self_fb>0.05</self_fb>
 		<mod_env_to_self>0</mod_env_to_self>
 		<drift>0</drift>
 		<attack>40</attack>
 		<hold>0</hold>
 		<release>160</release>
 		<dynamics>1</dynamics>
-		<mod_attack>10</mod_attack>
+		<mod_attack>20</mod_attack>
 		<mod_hold>0</mod_hold>
-		<mod_release>70</mod_release>
+		<mod_release>40</mod_release>
 		<mod_dynamics>0</mod_dynamics>
 	</fm_sub>
 	<sine_percussion>
@@ -469,7 +469,7 @@
 	<sampler_e>
 		<sample>
 			<load>0</load>
-			<sample>no sample</sample>
+			<sample>no path</sample>
 			<path>no path</path>
 			<start>0</start>
 		</sample>
@@ -503,12 +503,16 @@
 			<release>0</release>
 			<dynamics>1</dynamics>
 			<dyn_sample_mod>0</dyn_sample_mod>
+			<hold_time>0</hold_time>
+			<release_time>50</release_time>
 		</volume_envelope>
 		<mod_envelope>
 			<attack>0</attack>
 			<hold>0</hold>
 			<release>0</release>
 			<dynamics>0.5</dynamics>
+			<hold_time>0</hold_time>
+			<release_time>50</release_time>
 		</mod_envelope>
 		<mod_input>
 			<use_tuning>1</use_tuning>
