@@ -32,11 +32,11 @@
 		<mod_env_to_self>0</mod_env_to_self>
 	</fm_sub>
 	<sine_percussion>
-		<gain>0</gain>
-		<pitch>36</pitch>
-		<pitch_env>48</pitch_env>
+		<gain>6</gain>
+		<pitch>29</pitch>
+		<pitch_env>60</pitch_env>
 		<p_env_attack>0</p_env_attack>
-		<p_env_release>60</p_env_release>
+		<p_env_release>40</p_env_release>
 		<p_env_dyn_amt>0</p_env_dyn_amt>
 		<feedback>0</feedback>
 		<env_to_fb>0</env_to_fb>
