@@ -16,7 +16,7 @@
 		<env_sustain>1</env_sustain>
 		<env_release>900</env_release>
 		<carrier_mix>0.5</carrier_mix>
-		<mod_env_to_fm>1.3</mod_env_to_fm>
+		<mod_env_to_fm>0</mod_env_to_fm>
 		<attack>40</attack>
 		<hold>0</hold>
 		<release>160</release>
@@ -32,17 +32,17 @@
 		<mod_env_to_self>0</mod_env_to_self>
 	</fm_sub>
 	<sine_percussion>
-		<gain>6</gain>
-		<pitch>29</pitch>
-		<pitch_env>60</pitch_env>
+		<gain>-6</gain>
+		<pitch>48</pitch>
+		<pitch_env>48</pitch_env>
 		<p_env_attack>0</p_env_attack>
-		<p_env_release>40</p_env_release>
-		<p_env_dyn_amt>0</p_env_dyn_amt>
+		<p_env_release>35</p_env_release>
+		<p_env_dyn_amt>0.5</p_env_dyn_amt>
 		<feedback>0</feedback>
 		<env_to_fb>0</env_to_fb>
 		<attack>3</attack>
 		<hold>10</hold>
-		<release>150</release>
+		<release>30</release>
 	</sine_percussion>
 	<low_end_saturation>
 		<input_dB>6</input_dB>

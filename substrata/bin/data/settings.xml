@@ -109,7 +109,7 @@
 		<sample>
 			<load>0</load>
 			<sample>tibetan_01.wav</sample>
-			<path>/home/nicola/resources/np-samples/tibetan_bells/tibetan_01.wav</path>
+			<path>/home/np/resources/np-samples/tibetan_bells/tibetan_01.wav</path>
 			<start>0</start>
 		</sample>
 		<tuning>
@@ -372,7 +372,7 @@
 		<ratio_coarse>1</ratio_coarse>
 		<ratio_fine>0</ratio_fine>
 		<fm>0</fm>
-		<mod_env_to_fm>1.3</mod_env_to_fm>
+		<mod_env_to_fm>0</mod_env_to_fm>
 		<self_fb>0.05</self_fb>
 		<mod_env_to_self>0</mod_env_to_self>
 		<drift>0</drift>
@@ -386,17 +386,17 @@
 		<mod_dynamics>0</mod_dynamics>
 	</fm_sub>
 	<sine_percussion>
-		<gain>0</gain>
-		<pitch>36</pitch>
+		<gain>-6</gain>
+		<pitch>48</pitch>
 		<pitch_env>48</pitch_env>
 		<p_env_attack>0</p_env_attack>
-		<p_env_release>60</p_env_release>
-		<p_env_dyn_amt>0</p_env_dyn_amt>
+		<p_env_release>35</p_env_release>
+		<p_env_dyn_amt>0.5</p_env_dyn_amt>
 		<feedback>0</feedback>
 		<env_to_fb>0</env_to_fb>
 		<attack>3</attack>
 		<hold>10</hold>
-		<release>150</release>
+		<release>30</release>
 	</sine_percussion>
 	<low_end_saturation>
 		<input_dB>6</input_dB>
@@ -404,7 +404,7 @@
 	</low_end_saturation>
 	<sub_send>-32</sub_send>
 	<noise_n>
-		<gain>-18</gain>
+		<gain>-21</gain>
 		<pitch>-36</pitch>
 		<decimate>160</decimate>
 		<bits>24</bits>
@@ -427,7 +427,7 @@
 		<seq_to_decimate>-3</seq_to_decimate>
 	</noise_n>
 	<noise_m>
-		<gain>-18</gain>
+		<gain>-21</gain>
 		<pitch>-19</pitch>
 		<decimate>126</decimate>
 		<bits>24</bits>
