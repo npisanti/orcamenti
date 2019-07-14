@@ -388,15 +388,15 @@
 	<sine_percussion>
 		<gain>-6</gain>
 		<pitch>48</pitch>
-		<pitch_env>48</pitch_env>
+		<pitch_env>60</pitch_env>
 		<p_env_attack>0</p_env_attack>
-		<p_env_release>35</p_env_release>
+		<p_env_release>10</p_env_release>
 		<p_env_dyn_amt>0.5</p_env_dyn_amt>
 		<feedback>0</feedback>
 		<env_to_fb>0</env_to_fb>
-		<attack>3</attack>
-		<hold>10</hold>
-		<release>30</release>
+		<attack>1</attack>
+		<hold>5</hold>
+		<release>5</release>
 	</sine_percussion>
 	<low_end_saturation>
 		<input_dB>6</input_dB>
