@@ -26,6 +26,7 @@ public:
     pdsp::Patchable & in_trig();
     pdsp::Patchable & in_mod();
     pdsp::Patchable & in_hold();
+    pdsp::Patchable & in_release();
 
     pdsp::Patchable & ch( size_t index );
 

@@ -390,11 +390,11 @@
 		<pitch>48</pitch>
 		<pitch_env>60</pitch_env>
 		<p_env_attack>0</p_env_attack>
-		<p_env_release>10</p_env_release>
+		<p_env_release>12</p_env_release>
 		<p_env_dyn_amt>0.5</p_env_dyn_amt>
 		<feedback>0</feedback>
 		<env_to_fb>0</env_to_fb>
-		<attack>1</attack>
+		<attack>2</attack>
 		<hold>5</hold>
 		<release>5</release>
 	</sine_percussion>

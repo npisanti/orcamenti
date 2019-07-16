@@ -6,6 +6,7 @@ void np2::synth::NoiseDevice::patch() {
     addModuleInput ( "trig", trigger );
     addModuleInput ( "mod", seqMod );
     addModuleInput ( "hold", ampEnv.in_hold() );
+    addModuleInput ( "release", ampEnv.in_release() );
     //addModuleInput ( "release", ampEnv.in_release() );
 
     addModuleOutput( "L", gain0 );
@@ -100,6 +101,9 @@ pdsp::Patchable & np2::synth::NoiseDevice::in_mod(){
 }
 pdsp::Patchable & np2::synth::NoiseDevice::in_hold(){
     return in("hold");
+}
+pdsp::Patchable & np2::synth::NoiseDevice::in_release(){
+    return in("release");
 }
 
 pdsp::Patchable & np2::synth::NoiseDevice::ch( size_t index ) {

@@ -166,17 +166,17 @@ void ofApp::oscMapping(){
     osc.out_trig("/n", 0) * (1.0f/8.0f) >> noiseN.in("trig");  
     osc.parser("/n", 0) = triggerCheck;
     osc.out_value("/n", 1) >> noiseN.in("mod");     
-    osc.out_value("/n", 2) >> noiseN.in("hold");  
+    osc.out_value("/n", 2) >> noiseN.in("release");  
     osc.parser("/n", 2) = [&]( float value ) noexcept { 
-        return value * pdsp::Clockable::getOneBarTimeMs() * (1.0f/(16.0f*8.0f));
+        return value * pdsp::Clockable::getOneBarTimeMs() * (1.0f/(16.0f*2.0f));
     };
     
     osc.out_trig("/m", 0) * (1.0f/8.0f) >> noiseM.in("trig");  
     osc.parser("/m", 0) = triggerCheck;
     osc.out_value("/m", 1) >> noiseM.in("mod");     
-    osc.out_value("/m", 2) >> noiseM.in("hold");  
+    osc.out_value("/m", 2) >> noiseM.in("release");  
     osc.parser("/m", 2) = [&]( float value ) noexcept { 
-        return value * pdsp::Clockable::getOneBarTimeMs() * (1.0f/(16.0f*8.0f));
+        return value * pdsp::Clockable::getOneBarTimeMs() * (1.0f/(16.0f*2.0f));
     };
 
     for( size_t i=0; i<samplers.size(); ++i ){
